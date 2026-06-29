@@ -1,0 +1,37 @@
+{
+  "id": "drug-target-evidence-cards-compliance-001",
+  "title": "Data-licensing & provenance compliance gate (source allowlist + licence registry + licence-class + per-assertion citation + identifiability guard)",
+  "project": "drug-target-evidence-cards",
+  "type": "code",
+  "lane": "donated",
+  "priority": "high",
+  "domain": ["cancer", "bioinformatics", "open-data", "licensing", "compliance", "software"],
+  "riskTier": "high",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "Drug-Target-Evidence-Cards builds an open, source-cited library of drug-target evidence cards for cancer, for researchers/curators/advocates and explicitly NOT treatment advice. The binding cancer-domain guardrails require open-access/aggregate/de-identified data ONLY: controlled-access resources (dbGaP, EGA, individual-level biobanks) and any identifiable patient data are out of scope, non-commercial sources (COSMIC, OncoKB) must be excluded from the CC-BY output (pointer-only), and every assertion must be provenance-linked. This is the cold-start task that builds that compliance gate FIRST, as a CI release gate (a safety-critical subsystem, not a disclaimer), before any card or pipeline work. No partner, beneficiary, or reviewer is yet secured.",
+  "objective": "Build the data-licensing & provenance compliance gate that all later ingestion and card assembly must pass: a checked-in source allowlist + licence registry with a licence-class taxonomy (open | non-commercial | controlled-access-excluded), enforcement that only open-class data enters the CC-BY output (NC excluded/pointer-only, controlled-access hard-blocked), per-article PMC-OA licence handling, per-assertion citation enforcement (no source, no claim), and an identifiability guard that rejects individual-level/row-level data shapes - all wired into CI so a violation fails the build.",
+  "acceptanceCriteria": [
+    "Ships a checked-in source allowlist + licence registry mapping each permitted source to its licence, licenseClass (open | non-commercial | controlled-access-excluded), attribution string, version, and reuse notes; a source not in the registry cannot be ingested",
+    "Enforces licence-class rules: only open-class data may enter the CC-BY output; non-commercial sources (COSMIC, OncoKB) are excluded from card content (pointer-only); controlled-access sources (dbGaP, EGA, individual-level biobanks) are hard-blocked - a violation fails CI",
+    "Enforces per-assertion citation ('no source, no claim'): a card with any uncited assertion fails validation",
+    "Includes an identifiability guard that rejects individual-level / row-level genomic or clinical data shapes at ingest",
+    "Handles PMC Open Access per-article licence: only CC-BY/CC0 articles may contribute copied text/close paraphrase to a CC-BY card; CC-BY-NC / ND articles may be cited and linked but not quoted/redistributed",
+    "Flags CC-BY-SA (share-alike) sources for the governance licence decision before their data is copied into output",
+    "Runs in CI (build fails on any disallowed/uncited/NC-in-output/controlled-access violation); decisions reviewed and recorded by the compliance reviewer",
+    "No secrets, tokens, or PII written to logs, manifests, or committed files"
+  ],
+  "resources": [
+    "planning/projects/drug-target-evidence-cards/PLAN.md",
+    "CLAUDE.md",
+    "docs/good-deed-definition.md",
+    "packages/schema/src/schemas.ts",
+    "planning/ROADMAP.md"
+  ],
+  "output": "A merged compliance package (source allowlist + licence registry + licence-class enforcement + per-assertion citation enforcement + identifiability guard + per-article PMC-OA licence handling) wired into CI as a release gate - the contract that the ingestion adapters (drug-target-evidence-cards-adapters-006) and the validator/manifest (drug-target-evidence-cards-validate-008) implement and are tested against.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}
