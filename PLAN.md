@@ -1,6 +1,6 @@
 # Drug-Target-Evidence-Cards — PLAN.md
 
-> Status: Draft · Version: 0.1.0 · Last updated: 2026-06-28 · Owner: TBD (maintainer) · Lane: donated
+> Status: Draft · Version: 0.2.0 · Last updated: 2026-06-29 · Owner: TBD (maintainer) · Lane: donated
 
 An open, source-cited library of **drug-target evidence cards** for cancer: per (molecular target ×
 cancer indication), a structured, fully-provenanced summary of the open-data evidence linking that
@@ -30,6 +30,17 @@ cards** — one per target×indication — where every assertion is graded for e
 linked to a specific, licence-verified open source (with accession, release version, and retrieval
 date). The deliverable is the dataset itself (machine-readable), a human-readable rendering, and the
 reproducible, agent-neutral pipeline that builds and validates it.
+
+The space is crowded with mature, well-funded incumbents (Open Targets, Pharos/IDG, canSAR Black,
+DGIdb, OncoKB, CIViC), but **none combines** *cancer-wide* + *open-data-only* + *per-assertion
+verified licence-class provenance* + *explicit quality×maturity grading with surfaced contradictions*
++ *a reproducible, version-pinned build manifest*. The **defining differentiator** is that every
+assertion carries a **verified licence-class provenance record**, making the output **provably
+CC-BY-clean** (non-commercial sources excluded, share-alike tracked transitively) and **re-derivable**
+from a pinned build manifest (source release + scoring algorithm + hash) — so other open projects can
+redistribute it without re-auditing, which Open Targets (CC0 but no per-fact licence ledger), canSAR
+(mixed terms), and DGIdb (silently NC-contaminated via OncoKB) do not offer. See
+*Competitive landscape & differentiation*.
 
 The single most important design fact is the **compliance posture**, which is binding and non-
 negotiable: the project uses **only open-access, aggregate, or de-identified data**. Controlled-
@@ -119,8 +130,21 @@ what happens if the dates slip — rather than shipping cards to no real benefic
   excludes controlled-access data, and fails the build on any uncited assertion.
 - Build a **reproducible, agent-neutral pipeline** (ingest → normalise → assemble → grade → validate
   → render) that anyone can re-run to regenerate the cards from pinned source versions.
-- Apply an explicit, documented **evidence-grading rubric** so card readers can tell strong evidence
-  from weak.
+- Apply an explicit, documented, **cited** evidence-grading rubric — with **two separate axes**,
+  `evidenceQuality` (study strength) and `evidenceMaturity` (in-silico / in-vitro / in-vivo /
+  human-genetic / clinical-aggregate) — so card readers can tell strong evidence from weak **and**
+  preclinical signal from clinical readiness, and so a DepMap cell-line signal is never read as
+  clinical certainty. The rubric **adapts a published, cited scheme** (Open Targets harmonic-sum
+  datatype aggregation / a levels-of-evidence scheme), **not GRADE** (which grades clinical-outcome
+  certainty and does not fit heterogeneous target-credibility evidence).
+- Make the dataset **provably reusable**: ship a **per-assertion licence-class ledger** (with
+  transitive share-alike tracking) and a **version-pinned, hash-stamped build manifest** (source
+  release + scoring algorithm + screen project) so a third party can re-derive, diff, and
+  redistribute the cards without re-auditing licences.
+- Operationalize the project as **one shared engine** (schema + compliance gate + rubric + assembler)
+  consumed by the sibling card repos, with a **non-overlap rule**: this cancer-wide panel
+  **explicitly excludes** the Ewing/sarcoma indications owned by `ewing-drug-target-evidence` and
+  `ewing-biomarker-evidence-cards` (no double coverage).
 - Have research cards **reviewed and signed off by a qualified scientific curator** (medium tier)
   before release; carry a persistent **"research use — not medical advice"** notice on every card.
 - (Optional, gated) Produce a **patient-facing plain-language layer** that is **education only**,
@@ -156,11 +180,13 @@ Outcome-centric and beneficiary-first. Downloads, stars, and card counts are **n
 | Disallowed-source / controlled-access leakage into a card | n/a | **0** (build fails on any) | Compliance gate (CI) + reviewer audit |
 | Non-commercial (COSMIC/OncoKB) content copied into a CC-BY card | n/a | **0** (flagged + excluded by default; pointer-only) | Licence-class check in compliance gate |
 | Research cards with recorded scientific-reviewer sign-off | n/a | **100%** before release | Reviewers ledger + release checklist |
-| Reproducibility: cards regenerated from pinned source versions match the released set | n/a | **byte/■field-stable** re-run on the same source releases (diffs only where a source version changed) | CI re-run + manifest diff |
-| Evidence-grade present on every assertion | n/a | **100%** graded against the published rubric | Schema validation |
+| Reproducibility: cards regenerated from pinned source versions are **manifest-diff-explainable** | n/a | every value change on a re-run is **explained by a recorded source-release/algorithm diff** (no unexplained drift) — *not* byte-stable, since upstream rescoring (e.g. DepMap CERES→Chronos) legitimately changes values | CI re-run + manifest diff + per-card change-log |
+| Evidence-grade present on every assertion | n/a | **100%** carry **both** `evidenceQuality` and `evidenceMaturity` graded against the published rubric | Schema validation |
+| Grading inter-rater reliability (the project's core value) | n/a | second-curator agreement (Cohen's κ) on a sampled set **measured and reported per release** (target substantial agreement) | Dual-curator sample + κ computation |
+| Contradiction-detection recall (does the pipeline catch known disagreements?) | n/a | **measured against a seeded set of known cross-source disagreements**; misses triaged | Contradiction-recall test vs curated gold set |
 | Source-version staleness contained | n/a | **0** cards served as "current" past a source's `validUntil` without an auto-flag + re-review | Staleness test against `lastVerified`/`validUntil` |
-| Independent reproduction by a third party | 0 | **≥ 1** external party re-runs the pipeline and confirms the cards | Reproduction report (issue/PR) |
-| Cards used in a real research/advocacy workflow | 0 | **≥ 1** documented use by a secured beneficiary (e.g. seeded a target dossier, informed an advocacy brief) | Beneficiary-attested log |
+| Independent reproduction by a third party | 0 | **≥ 1** party **independent of the maintainers** re-runs the pipeline and confirms the cards (a friendly-lab self-reproduction does not count) | Reproduction report (issue/PR) |
+| Cards used in a real research/advocacy workflow | 0 | **≥ 1** documented use by a secured beneficiary that **informed a concrete decision** (seeded a target dossier, informed an advocacy brief) — qualitative, not a mere download | Beneficiary-attested log |
 | Patient-facing layer (if pursued): oncologist + advocate sign-off before release | n/a | **100%** (blocking; no sign-off, no release) | Reviewers ledger; release gate |
 | Patient-facing readability + "not medical advice" notice present | n/a | every page reviewed for plain-language + carries the notice | Advocate review + automated notice check |
 
@@ -174,7 +200,13 @@ green, and scientific (and, for any patient-facing content, oncologist + advocat
 
 **In scope**
 
-- A versioned **Evidence Card schema** (JSON Schema) and an **evidence-grading rubric**.
+- A versioned **Evidence Card schema** (JSON Schema) and a **cited evidence-grading rubric** with
+  separate `evidenceQuality` × `evidenceMaturity` axes (see *Solution approach*).
+- A **target-safety / on-target-liability dimension** (genetic constraint/essentiality, tissue
+  expression-breadth) recorded alongside association evidence, so a card cannot over-promote a
+  tractable-but-toxic target by reporting association strength alone.
+- **Negative / absence-of-evidence** as first-class card content (e.g. "no dependency signal in
+  lineage X" is informative), so cards are not biased toward positive evidence only.
 - A **data-licensing & provenance compliance gate**: source allowlist + licence registry +
   licence-class classifier (open / non-commercial / controlled-access-excluded) + per-assertion
   citation enforcement, run in CI.
@@ -186,9 +218,16 @@ green, and scientific (and, for any patient-facing content, oncologist + advocat
   checked) with **mandatory human verification** of every extracted assertion.
 - A human-readable **rendering** of the cards (static site + downloadable dataset), accessible
   (WCAG 2.2 AA) and openly licensed.
-- (Optional, gated) a **patient-facing plain-language layer** behind blocking oncologist + advocate
-  review.
-- **Provenance, source-version pinning, and a staleness fail-safe** (`lastVerified`/`validUntil`).
+- (**Deferred out of v1**, optional, gated) a **patient-facing plain-language layer** behind blocking
+  oncologist + advocate review. It is HIGH-risk, blocking-gated, and outside the core value prop;
+  v1 ships research cards + the reuse ledger first, and the advocate layer is added **only once an
+  oncologist + advocate pair is secured** — shortening the reviewer-acquisition critical path.
+- **Provenance, source-version pinning, and a staleness fail-safe** (`lastVerified`/`validUntil`),
+  plus a **per-card change-log** keyed to source-release diffs (what assertion changed and why) to
+  streamline reviewer re-sign-off.
+- A **shared engine boundary**: this repo consumes (and helps build) the shared
+  schema/gate/rubric/assembler engine, and its panel **excludes** the Ewing/sarcoma indications owned
+  by the sibling repos (see *Competitive landscape & differentiation*).
 
 **Out of scope (explicitly will NOT do)**
 
@@ -196,6 +235,12 @@ green, and scientific (and, for any patient-facing content, oncologist + advocat
   re-identifiable patient data — not ingested, not derived from, not referenced at row level.
 - **Treatment, dosing, trial-selection, or clinical recommendations** for any individual; ranking
   therapies "best for patient X"; any clinical decision support.
+- **Ranking targets by clinical-trial activity**, or **linking to recruiting trials** — even aggregate
+  trial counts must not be turned into an endorsement or edge toward trial-matching. Counts only,
+  with a "not trial-matching" notice.
+- **Double-covering the Ewing/sarcoma indications** owned by `ewing-drug-target-evidence` /
+  `ewing-biomarker-evidence-cards`; this cancer-wide panel excludes them (they are the siblings' depth
+  pilots).
 - Copying **non-commercial** datasets (COSMIC, OncoKB) into the openly-licensed output; they may be
   *pointed to* under their own terms only, never redistributed.
 - Original biological discovery, novel analyses presented as findings, or unsourced inference; the
@@ -207,6 +252,70 @@ When a request, a source, or an extracted statement falls in the out-of-scope se
 **refuses to include it**, records why, and (for sources) routes it to the licence-review queue. A
 non-commercial or controlled-access source surfacing in a card is a **build failure**, treated the
 same as an uncited assertion.
+
+---
+
+## Competitive landscape & differentiation
+
+The space is crowded with mature, well-funded resources. **None** combines *cancer-wide* +
+*open-data-only* + *per-assertion verified licence class* + *explicit quality×maturity grading* +
+*surfaced contradictions* + *a reproducible build manifest*. Each overlaps in part:
+
+- **Open Targets Platform** — the closest competitor. Target–disease associations across genetic,
+  somatic, expression, literature, animal-model and pathway evidence; **harmonic-sum** scoring over
+  ~7.8M associations; quarterly releases; **CC0**; open code. *Gap we fill:* it is a scored
+  *platform/database*, not a curated, human-reviewed **narrative card** per target×cancer; the
+  harmonic sum is opaque to non-experts; it offers **no per-assertion verified-licence provenance for
+  downstream reuse** (a reuser must re-derive licences); it is not cancer-specialized, not
+  advocate-facing, and scores contradictions away rather than surfacing them.
+- **Pharos / IDG / TCRD** — target-centric; collates 70+ resources; signature **Target Development
+  Level** (Tclin/Tchem/Tbio/Tdark). *Gap:* best-in-class tractability/illumination framing but
+  **weakly disease/cancer-specific**; not a per-indication evidence synthesis; little provenance
+  grading; not advocate-facing.
+- **canSAR Black (ICR)** — largest public *oncology* drug-discovery knowledgebase; AI-based
+  druggability / "drug-target-likeness." *Gap:* a *query knowledgebase*, not licence-verified reusable
+  cards; downstream-redistribution provenance/licence terms are not the product; mixed reuse terms;
+  not advocate-readable.
+- **DGIdb** — aggregates drug–gene interactions from ~30+ sources (incl. CIViC, OncoKB); open
+  downloads. *Gap:* interaction lists, not graded disease-contextual evidence; **inherits the licence
+  heterogeneity of its sources (incl. OncoKB non-commercial) silently** — exactly the trap this
+  project avoids by classing licences.
+- **OncoKB (MSK)** — precision-oncology variant/therapeutic annotation; first FDA-partially-recognized
+  somatic-variant DB; therapeutic Levels 1–4. ***Excluded from our output:*** **non-commercial /
+  registration-gated** (pointer-only under its own terms), and clinically-oriented (variant→therapy)
+  — the advice-adjacent zone this project deliberately avoids.
+- **CIViC** — community-curated clinical interpretation of variants in cancer; **open (CC0), public
+  API, open code** — the open analogue to OncoKB and a candidate **model / pivot target** for a
+  contribution overlay. *Gap:* variant→clinical-significance focused, not target-credibility; rare-
+  cancer coverage uneven.
+- **My Cancer Genome (VICC)** — readable clinical context, but clinician-facing decision support
+  (advice-zone), not open-data-reuse-first, and **less actively maintained/distinctive recently**.
+- **Probe Miner** — rigorous quantitative chemical-probe/tractability signal (linked from Open
+  Targets), but narrow (chemical probes only), not disease-contextual evidence.
+- **DepMap (Broad)** — the dependency backbone (**CC-BY 4.0**, aggregate), but a *dataset*, not a card,
+  and **version/algorithm-sensitive** (CERES→Chronos, batch effects — see *Solution approach*).
+
+**Differentiators to win.**
+1. **Per-assertion verified licence-class provenance** — the output is *provably* CC-BY-clean (NC
+   excluded, SA tracked transitively), so other open projects can redistribute without re-auditing.
+   The one thing Open Targets (CC0 but no per-fact ledger), canSAR (mixed), and DGIdb (silently
+   NC-contaminated) do **not** offer.
+2. **Reproducible, version-pinned build manifest** (source release + DepMap algorithm + hash) → cards
+   are re-derivable and diffable, a research artifact rather than a moving black box.
+3. **Published, cited quality×maturity grading with surfaced contradictions** → readers distinguish a
+   powered GWAS from one cell line and see disagreement, not an opaque harmonic sum.
+4. **Human scientific sign-off, version-scoped**, kept honest by the M2 kill-gate.
+5. **Advocate-readable, gated plain-language layer** — an audience the incumbents ignore (deferred
+   out of v1).
+6. **Open-only by construction** — a cleaner reuse story than OncoKB (NC) or canSAR (mixed).
+7. **Shared engine + non-overlapping panels vs the Ewing siblings.** The winning structural move is
+   **one schema + one compliance gate + one rubric + one assembler engine** (a `target-evidence-core`
+   library), with `ewing-drug-target-evidence` as the **deep single-disease pilot** (rare-cancer
+   depth, dedicated sarcoma reviewer), `drug-target-evidence-cards` as the **cancer-wide breadth
+   instance that explicitly excludes the Ewing/sarcoma indications the sibling owns** (no double
+   coverage), and `ewing-biomarker-evidence-cards` reusing the same engine for the **biomarker** card
+   type. The differentiator is the *generalized engine + non-overlapping panels*, not three hand-built
+   silos — this is both the clearest correctness fix and the largest efficiency win.
 
 ---
 
@@ -246,27 +355,81 @@ provenance) → render`.
      individual-level genotype/clinical records); row-level or controlled-access shapes are rejected.
 
 2. **Evidence Card schema + grading rubric (`packages/schema-cards`).** A JSON Schema for the card
-   (see *data model* below) and a documented, versioned **evidence-grading rubric** (adapted from
-   Open Targets-style association scoring / GRADE-like tiers: e.g. *Strong / Moderate / Limited /
-   Preclinical-only*, keyed to evidence type and source strength). Every assertion carries a grade.
+   (see *data model* below) and a documented, versioned **evidence-grading rubric** built on **two
+   separate, non-collapsible axes** so that incommensurable things are not averaged into one
+   misleading label:
+   - `evidenceQuality` — strength of the underlying study (e.g. a powered GWAS vs. a single cell
+     line), and
+   - `evidenceMaturity` — `in-silico` | `in-vitro` | `in-vivo` | `human-genetic` | `clinical-aggregate`,
+     a **weighted** axis because evidence types are **not interchangeable**: human genetic support
+     roughly doubles (≈2–2.6×) the odds of eventual clinical approval (Nelson et al., *Nat Genet*
+     2015; Minikel et al., *Nature* 2024), so genetic vs. preclinical-only evidence must be weighted
+     with a documented, cited basis.
+   The rubric **adapts a published, cited scheme** — Open Targets' harmonic-sum datatype aggregation
+   or a levels-of-evidence/STAR-style scheme — and **explicitly does not use GRADE**, which grades
+   *certainty of a clinical-outcome estimate from comparative studies* and would imply clinical
+   certainty these cards cannot support. Every assertion carries **both** axes; the rubric is
+   published with the dataset (or the M2 kill-gate — "no better than reading raw sources" — fires).
 
 3. **Source connectors (`adapters/sources/*`).** One adapter per open source (Open Targets GraphQL,
    ChEMBL, UniProt, Ensembl, Reactome, Human Protein Atlas, DepMap, ClinicalTrials.gov, PMC-OA,
    DGIdb/Pharos). Each adapter declares the source's registry entry, pins the **release/version**,
    records `retrievalDate`, and emits normalised, ID-mapped facts with attached provenance. Adapters
    are the only Elyos-style vendor-specific code; the pipeline core stays neutral.
+   - **DepMap is not "just another source."** Its dependency scores are **algorithm-version-sensitive**:
+     the pipeline moved from **CERES to Chronos at 21Q2** (different copy-number / common-essential
+     correction), and **cross-project Broad-Achilles vs. Sanger-Score screens carry batch effects**
+     driven by library and assay length, needing ComBat-style correction (Dempster et al., *Genome
+     Biol* 2019; Cancer Data Science). Therefore a dependency assertion **pins not just the DepMap
+     release but the scoring algorithm (e.g. Chronos) and the screen project (Broad/Sanger)**, and
+     each dependency assertion carries a `replicatesAcrossProjects` flag, a **lineage-specificity**
+     note, and the standard caveats (e.g. **−0.5 Chronos** dependency threshold, **90th-percentile
+     common-essential** exclusion). A dependency grade may not rise above "Limited" on a single
+     un-replicated project signal (see *Open questions*).
+   - **Ensembl licence is verified per data type**, not blanket-classed: Ensembl is largely
+     no-restriction, but **some incorporated third-party datasets carry their own terms** — the
+     adapter records the licence of the specific data type it pulls.
 
 4. **Assembly + ID mapping (`packages/assemble`).** Resolves a target to canonical identifiers
    (HGNC/Ensembl/UniProt) and an indication to an ontology id (EFO/MONDO/OncoTree), then assembles
    per-source facts into a single card, deduplicating and attaching grades + provenance. Surfaces
-   **contradictions** (sources that disagree) rather than silently picking one.
+   **contradictions** (sources that disagree) rather than silently picking one — and applies a
+   **documented contradiction-aggregation policy** so two curators grade the same card the same way.
+   Each contradiction is tagged with a **taxonomy label**: `measurement-difference` (assay/method
+   artefact), `biological-context-dependence` (true lineage/subtype-specific effect), or
+   `version-drift` (an upstream re-release changed a value). The policy states **how a graded card
+   net-summarizes** under disagreement (it never silently resolves; it records the disagreement and
+   the net read), and a **contradiction-detection recall** test checks the pipeline against a curated
+   gold set of known disagreements.
 
 5. **Literature extraction (`packages/litextract`, LLM-assisted, human-verified).** Pulls
    open-access full text from the **PMC-OA subset** (checking the **per-article licence** — the OA
-   subset mixes CC-BY, CC-BY-NC, and CC0; only commercially-reusable licences feed a CC-BY card),
-   uses Claude to draft candidate evidence statements with span-level citations, then routes **every**
+   subset mixes CC-BY, CC-BY-NC, CC-BY-NC-ND, and CC0; only commercially-reusable licences feed a
+   CC-BY card), uses Claude to draft candidate evidence statements with **mandatory span-level
+   citations** (long-context reading + structured citation output; prompt-cached source text; a strict
+   "every claim must cite a quoted span or be dropped" output contract), then routes **every**
    statement to a human curator for verification before it can enter a card. The LLM never writes a
    final, shippable assertion unreviewed.
+
+   **Claude's bounded, assistive roles across the pipeline** (provider-neutral client; model
+   selection/pricing per the Claude API skill): (a) span-cited PMC-OA evidence extraction (above);
+   (b) **structuring/normalizing** heterogeneous source facts (Open Targets / ChEMBL / DepMap /
+   UniProt) into the JSON-schema card via tool-use / Ajv-validated constrained output; (c)
+   **cross-source contradiction *detection*** — flagging "source A up-regulated, source B null/down"
+   and drafting a candidate taxonomy label for the curator to confirm (**surface, never resolve**);
+   (d) drafting tractability/safety and limitations narrative (Pharos TDL, Probe Miner thresholds,
+   genetic-constraint/expression-breadth) for the curator to edit; (e) plain-language rewriting of
+   *already-signed-off* cards (HIGH-tier layer, never auto-published); (f) **licence-class triage** —
+   pre-classifying a new source's licence text into `open`/`open-sa`/`NC`/`excluded` as a *draft*.
+
+   **Hard human gates the LLM must NOT cross:** no clinical / treatment / per-patient recommendation
+   (structurally impossible in the schema and reinforced in prompts); **no final evidence grade and
+   no final/shippable card** (the LLM proposes, the rubric + scientific reviewer dispose); no
+   fabricated or uncited claim (dropped; "no source, no claim" is CI-enforced, not model-trusted);
+   **no binding licence or medical/legal determination** (the compliance reviewer makes the licence
+   call, the oncologist owns medical-safety framing); no contradiction *resolution*; and **only
+   open-access content is ever sent to the API** — never controlled-access/identifiable data (none
+   exists by construction) and never secrets.
 
 6. **Validation + manifest (`packages/validate`).** Runs the compliance gate, schema validation,
    grade-coverage, and the **staleness check** (`lastVerified`/`validUntil` per source release);
@@ -284,15 +447,31 @@ provenance) → render`.
 - `target`: `{ geneSymbol(HGNC), ensemblId, uniprotId, proteinName }`
 - `indication`: `{ cancerType, ontologyId(EFO/MONDO/OncoTree), aggregateOnly: true }`
 - `associationEvidence[]`: `{ evidenceType(genetic|somatic|copy-number|expression|dependency|
-  pathway|tractability|literature|clinical-context), statement, direction, grade, sources[] }`
+  pathway|tractability|literature|clinical-context|safety), statement, direction,
+  evidenceQuality, evidenceMaturity(in-silico|in-vitro|in-vivo|human-genetic|clinical-aggregate),
+  isAbsenceOfEvidence(bool), sources[] }`
+  *(two grade axes — quality and maturity — never collapsed; `isAbsenceOfEvidence` lets "no
+  dependency signal in lineage X" be recorded as informative, not omitted)*
+- `dependencyDetail?` (for `dependency` evidence): `{ depmapRelease, scoringAlgorithm(e.g. Chronos),
+  screenProject(Broad|Sanger), replicatesAcrossProjects(bool), lineageSpecificity, caveats }`
+- `targetSafety`: `{ geneticConstraint, essentiality, expressionBreadth, onTargetLiabilityNote,
+  sources[] }`
+  *(so a tractable-but-toxic target is not over-promoted by association strength alone)*
 - `tractability`: `{ smallMolecule, antibody, otherModality, structuresAvailable, sources[] }`
 - `knownDrugs[]`: `{ name, chemblId, mechanism, modality, researchStageNote, sources[] }`
   *(research context only — never framed as a recommendation)*
 - `clinicalLandscape`: `{ aggregateTrialCounts, phases, sourcedFrom: ClinicalTrials.gov, sources[] }`
-  *(aggregate counts only; no patient-level data; not a trial-matching tool)*
-- `limitations`, `contradictions[]`, `openQuestions[]`
+  *(aggregate counts only; no patient-level data; **no ranking by trial activity; no links to
+  recruiting trials**; not a trial-matching tool)*
+- `limitations`, `contradictions[]`: `{ statement, taxonomy(measurement-difference|
+  biological-context-dependence|version-drift), disagreeingSources[], netRead }`, `openQuestions[]`
 - `provenance.sources[]`: `{ sourceName, accession, releaseVersion, retrievalDate, url, license,
-  licenseClass, lastVerified, validUntil }`
+  licenseClass(open|open-sa|non-commercial|controlled-access-excluded), upstreamProvenance[],
+  lastVerified, validUntil }`
+  *(`upstreamProvenance[]` records transitive source-of-source — e.g. ChEMBL-derived facts arriving
+  via CC0 Open Targets still carry the ChEMBL share-alike licence class)*
+- `changeLog[]`: `{ fromCardVersion, toCardVersion, sourceReleaseDiff, assertionsChanged, reason }`
+  *(per-card diff keyed to source-release changes, to streamline reviewer re-sign-off)*
 - `review`: `{ scientificReviewer, signedOffCardVersion, date }`,
   `patientFacing?`: `{ oncologistReviewer, advocateReviewer, signedOffVersion, date }`
 - `disclaimer`: constant — *"Research summary compiled from open sources. Not medical advice. Not for
@@ -329,24 +508,27 @@ consideration; when they conflict with scope, breadth, or convenience, the guard
   (HIGH tier, blocking)**.
 - **Provenance on every assertion.** No source, no claim — enforced in CI.
 
-**Source allowlist (initial, each verified before use).** *Classes:* `open` = reusable in CC-BY with
-attribution; `NC` = non-commercial, **excluded** from output (pointer-only); `excluded` = controlled
-access, hard-blocked.
+**Source allowlist (initial, each verified before use).** *Classes:* `open` = permissively reusable in
+CC-BY with attribution; `open-sa` = open **but share-alike** (CC-BY-SA — reusable, but obligations
+**propagate** to combined records and must be tracked, including **transitively**); `NC` =
+non-commercial, **excluded** from output (pointer-only); `excluded` = controlled access, hard-blocked.
+**`open-sa` is its own class** (not lumped into `open`) precisely so the gate can enforce share-alike
+*propagation*, not merely "is it open."
 
 | Source | Content | Licence (to verify per release) | Class |
 |---|---|---|---|
-| Open Targets Platform | target–disease association evidence | CC0 1.0 | open |
-| ChEMBL | bioactivity, drugs, mechanisms | CC BY-SA 3.0 | open (share-alike noted) |
+| Open Targets Platform | target–disease association evidence | CC0 1.0 | open *(but see transitive note — ingests ChEMBL)* |
+| ChEMBL | bioactivity, drugs, mechanisms | CC BY-SA 3.0 Unported | **open-sa** |
 | UniProt | protein function/annotation | CC BY 4.0 | open |
-| Ensembl / Ensembl genes | gene models, IDs | open (EMBL-EBI terms; no restriction) | open |
+| Ensembl / Ensembl genes | gene models, IDs | per data type (mostly no-restriction; **some incorporated datasets carry third-party terms**) | open *(verify per data type)* |
 | Reactome | pathways | CC BY 4.0 | open |
-| Human Protein Atlas | expression/localisation | CC BY-SA 3.0 | open (share-alike noted) |
-| DepMap (Broad) | genetic dependency (aggregate) | CC BY 4.0 | open |
-| IUPHAR/BPS Guide to Pharmacology | targets/ligands | CC BY-SA 4.0 | open (share-alike noted) |
+| Human Protein Atlas | expression/localisation | CC BY-SA 3.0 | **open-sa** |
+| DepMap (Broad) | genetic dependency (aggregate) | CC BY 4.0 | open *(pin release + algorithm + screen project)* |
+| IUPHAR/BPS Guide to Pharmacology | targets/ligands | CC BY-SA 4.0 | **open-sa** |
 | DGIdb | drug–gene interactions (aggregated) | open (MIT/CC0; verify per upstream) | open (verify) |
 | Pharos / IDG (TCRD) | target development level | open (NIH) | open (verify) |
 | ClinicalTrials.gov | **aggregate** trial counts/phases | U.S. gov public domain (attribution/linkback per ToU) | open |
-| PMC Open Access subset | open-access full text | **per-article**: CC-BY / CC-BY-NC / CC0 | mixed — per-article |
+| PMC Open Access subset | open-access full text | **per-article**: CC-BY / CC-BY-NC / CC-BY-NC-ND / CC0 | mixed — per-article |
 | TCGA (open tier) | aggregate/summary only | NIH open-access tier | open (open tier only) |
 | GEO | expression series (aggregate) | per-submission (verify) | open (verify per series) |
 | PRIDE / ProteomeXchange | proteomics (aggregate) | CC-BY / CC0 (verify) | open (verify) |
@@ -354,14 +536,21 @@ access, hard-blocked.
 | **OncoKB** | variant/therapeutic annotation | **non-commercial / academic** | **NC — excluded** |
 | dbGaP / EGA / individual biobanks | individual-level | controlled access | **excluded** |
 
-**Share-alike note.** ChEMBL, HPA, IUPHAR, and any CC-BY-SA source impose **share-alike** on
-derivatives *of their data*. Mixing CC-BY-SA data into a single combined record can force the
-combined record under a compatible share-alike licence. To keep the dataset cleanly **CC-BY-4.0**,
-SA-licensed facts are (a) attributed and licence-tagged per assertion and (b) **kept separable** (the
-card records *which assertions came from SA sources*), and the project takes a **governance
-decision** on whether to (i) dual-license affected card fields, (ii) restrict SA sources to
-pointer/attribution rather than copied values, or (iii) release the dataset CC-BY-SA. **This is an
-open question requiring a decision before SA-source data is copied into output.**
+**Share-alike note (the single biggest legal risk).** ChEMBL (**CC-BY-SA 3.0 Unported**), HPA, and
+IUPHAR/GtoPdb (CC-BY-SA) impose **share-alike** on derivatives *of their data*: adaptations must be
+redistributed under the same licence. Two compounding hazards:
+- **Transitive SA via CC0 aggregators.** Open Targets is **CC0**, but it *ingests ChEMBL* for its
+  drug/known-drug datatype. Copying Open Targets' drug evidence may copy **ChEMBL-derived content that
+  still carries SA obligations transitively.** The licence registry therefore tracks
+  **upstream-of-upstream provenance** (`upstreamProvenance[]`), not just the immediate source's
+  licence, so SA reach is detected even when laundered through a CC0 layer.
+- **A combined card is plausibly a single adaptation**, and per-field tagging may not cleanly sever SA
+  reach under SA 3.0. "Keep SA facts separable per assertion" is necessary but **may not be
+  sufficient.** The **safest defaults** are therefore (i) treat SA-source data as
+  **pointer/derived-fact-with-attribution only** (no copied values), or (ii) **release the dataset
+  CC-BY-SA-4.0**. The v0.1 default of CC-BY-4.0 is the *riskier* option; **this v0.2 flags that the
+  default should be revisited toward CC-BY-SA** and records it as a blocking governance decision
+  (see *Open questions*). No SA-source data is copied into output until that decision is made.
 
 **Per-article licence handling for PMC-OA.** The OA subset is **not uniformly reusable**: it mixes
 CC-BY, CC-BY-NC, CC-BY-NC-ND, and CC0. The litextract adapter reads each article's machine-readable
@@ -370,9 +559,11 @@ paraphrase to a CC-BY card; NC/ND articles may be **cited and linked** but not q
 This is enforced in the compliance gate per article, not assumed.
 
 **Provenance model.** Every assertion → ≥ 1 `Source` record `{sourceName, accession, releaseVersion,
-retrievalDate, url, license, licenseClass, lastVerified, validUntil}`. The assembler may not emit an
-assertion without it; a citation-coverage validator enforces it in CI. The **build manifest** pins
-every source release + hash so the cards are reproducible and auditable.
+retrievalDate, url, license, licenseClass(open|open-sa|NC|excluded), upstreamProvenance[],
+lastVerified, validUntil}`. The assembler may not emit an assertion without it; a citation-coverage
+validator enforces it in CI. The **build manifest** pins every source release **+ scoring algorithm
+(e.g. DepMap Chronos) + screen project + hash**, so the cards are reproducible/auditable and a re-run
+is **manifest-diff-explainable** (not byte-stable — upstream rescoring legitimately changes values).
 
 **Staleness is fail-safe.** Sources release new versions (Open Targets, ChEMBL, DepMap on regular
 cadences); a card pinned to an old release can silently go stale. Each `Source` carries `lastVerified`
@@ -381,10 +572,12 @@ cadences); a card pinned to an old release can silently go stale. Each `Source` 
 patient-facing layer, **withheld** until re-verified and re-signed-off. A staleness test enforces
 this.
 
-**Output licensing.** Code: **MIT**. Cards/dataset/content/docs: **CC-BY-4.0** (attribution to every
-upstream source preserved per the registry), **subject to the share-alike governance decision above**.
-The dataset ships a `LICENSES`/`ATTRIBUTION` manifest listing every source, its licence, and its
-required attribution string.
+**Output licensing.** Code: **MIT**. Cards/dataset/content/docs: **CC-BY-4.0 *or* CC-BY-SA-4.0 —
+pending the share-alike governance decision above**, with this v0.2 noting that **CC-BY-SA-4.0 (or
+SA-data-as-pointer-only) is the safer default** given transitive ChEMBL/HPA/IUPHAR share-alike. The
+dataset ships a `LICENSES`/`ATTRIBUTION` manifest listing every source, its licence (and class), and
+its required attribution string — itself the **per-assertion licence-class reuse ledger** that is the
+project's primary differentiator.
 
 **Privacy / PII stance (conservative).** By construction the project stores **no individual-level
 data** — only aggregate/summary facts and citations to public sources. No patient database exists.
@@ -433,26 +626,35 @@ publishing; the patient-facing layer last and gated on a HIGH-tier reviewer pair
 
 - **M0 — Compliance gate, schema & exemplar (cold-start).**
   *Goal:* the licensing/provenance safety subsystem, the card schema + grading rubric, and one
-  hand-curated exemplar card exist before bulk work.
-  *Exit:* compliance gate (allowlist + licence registry + licence-class + per-assertion citation +
-  identifiability guard) merged and **passing in CI**; Evidence Card JSON Schema + grading rubric
-  merged; **one exemplar card** built by hand for a chosen target, fully cited, scientific-reviewer
-  draft-reviewed; monorepo + CI green; "not medical advice" framing wired in. **Initial indication +
-  target panel selected** (criteria in *Open questions*) so M2 builds against a real corpus.
+  hand-curated exemplar card exist before bulk work — **built as the shared `target-evidence-core`
+  engine** the sibling repos consume.
+  *Exit:* compliance gate (allowlist + licence registry + **`open`/`open-sa`/`NC`/`excluded` classes
+  with transitive SA tracking** + per-assertion citation + identifiability guard) merged and
+  **passing in CI**; Evidence Card JSON Schema + **cited grading rubric with separate
+  `evidenceQuality` × `evidenceMaturity` axes (no GRADE) + target-safety fields** merged; **one
+  exemplar card** built by hand for a chosen target, fully cited, scientific-reviewer draft-reviewed;
+  monorepo + CI green; "not medical advice" framing wired in. **Initial indication + target panel
+  selected** (criteria in *Open questions*; **excludes Ewing/sarcoma**) so M2 builds against a real
+  corpus.
 
 - **M1 — Ingestion & provenance pipeline.**
   *Goal:* reproducible ingest → assemble → validate from pinned open sources.
   *Exit:* source adapters for the core open sources (Open Targets, ChEMBL, UniProt, Ensembl,
-  Reactome, HPA, DepMap, ClinicalTrials.gov aggregate); ID mapping; build manifest with pinned
-  versions/hashes; compliance gate + provenance validator + staleness check enforced in CI; the
-  exemplar card regenerated **reproducibly** by the pipeline.
+  Reactome, HPA, DepMap, ClinicalTrials.gov aggregate); **DepMap adapter pins release + scoring
+  algorithm + screen project and emits `replicatesAcrossProjects`/lineage notes**; ID mapping; build
+  manifest with pinned versions/algorithms/hashes; compliance gate + provenance validator + staleness
+  check enforced in CI; the exemplar card regenerated **manifest-diff-explainably** (not byte-stable)
+  by the pipeline.
 
 - **M2 — Research evidence cards (scientific-reviewer gated).**
   *Goal:* the initial target panel × indication as cited, graded cards.
-  *Exit:* cards for the chosen panel assembled, every assertion cited + graded; **scientific reviewer
-  sign-off recorded** for each released card; contradictions surfaced; "research use — not medical
-  advice" on every card; compliance gate green. **Kill-gate:** if the scientific reviewer finds the
-  synthesis no more reliable/useful than reading the raw sources, pause and reassess before scaling.
+  *Exit:* cards for the chosen panel assembled, every assertion graded on **both** axes
+  (`evidenceQuality` × `evidenceMaturity`); **scientific reviewer sign-off recorded** for each
+  released card; contradictions surfaced **and tagged with the taxonomy** (measurement /
+  biological-context / version-drift) under the documented contradiction-aggregation policy; a
+  **second-curator inter-rater κ** measured on a sample; "research use — not medical advice" on every
+  card; compliance gate green. **Kill-gate:** if the scientific reviewer finds the synthesis no more
+  reliable/useful than reading the raw sources, pause and reassess before scaling.
 
 - **M3 — Literature extraction & enrichment (human-verified).**
   *Goal:* enrich cards with PMC-OA evidence under per-article licence checks + human verification.
@@ -465,10 +667,10 @@ publishing; the patient-facing layer last and gated on a HIGH-tier reviewer pair
   *Exit:* accessible (WCAG 2.2 AA) static rendering + downloadable CC-BY dataset + attribution
   manifest; versioned release; reproduction instructions; **≥ 1 third-party reproduction** attempted.
 
-- **M5 — Patient-facing plain-language layer (HIGH-tier, OPTIONAL, blocking-gated).**
+- **M5 — Patient-facing plain-language layer (HIGH-tier, OPTIONAL, DEFERRED OUT OF v1, blocking-gated).**
   *Goal:* faithful, education-only summaries for patients/advocates.
-  *Goal-gate:* **builds only if** a credentialed **oncologist** and a **patient advocate** are
-  secured. *Exit (Definition of Shipped for this layer):* plain-language layer drafted from the cited
+  *Goal-gate:* **deferred out of v1 by default** (to shorten the reviewer-acquisition critical path)
+  and **builds only if** a credentialed **oncologist** and a **patient advocate** are secured. *Exit (Definition of Shipped for this layer):* plain-language layer drafted from the cited
   cards; **oncologist + advocate sign-off recorded (blocking)**; "not medical advice" on every page;
   readability verified; nothing reads as a treatment recommendation. *(Gated — TO BE SECURED.)*
 
@@ -550,7 +752,12 @@ reviewer profile.
 |---|---|---|---|---|
 | Controlled-access / identifiable patient data enters a card | Low | Critical | Hard-block in compliance gate; identifiability guard rejects individual-level shapes; out-of-scope by design (no patient DB); reviewer audit | Compliance reviewer / Maintainer |
 | Non-commercial data (COSMIC/OncoKB) copied into a CC-BY output | Medium | High | Licence-class registry marks them NC; gate excludes NC from output (pointer-only); CI fails on NC content in a card | Compliance reviewer |
-| Share-alike (CC-BY-SA) data forces the dataset's licence | Medium | High | Per-assertion licence tagging + separability; **governance decision** on dual-license / pointer-only / CC-BY-SA before any SA data is copied | Maintainer / Governance |
+| Share-alike (CC-BY-SA) data forces the dataset's licence | Medium | High | `open-sa` licence class + per-assertion licence tagging + separability; **governance decision** (v0.2 leans CC-BY-SA / pointer-only) before any SA data is copied | Maintainer / Governance |
+| **Transitive** SA contamination (ChEMBL-derived facts arriving via CC0 Open Targets) | Medium | High | Registry tracks **upstream-of-upstream provenance** (`upstreamProvenance[]`); gate enforces SA class even when laundered through a CC0 layer | Compliance reviewer |
+| DepMap algorithm/screen drift mis-grades dependency (CERES→Chronos, Broad/Sanger batch effects) | High | Medium | Pin release + algorithm + screen project; `replicatesAcrossProjects` flag + lineage note + common-essential caveats; no grade above "Limited" on single un-replicated signal; manifest-diff-explainable (not byte-stable) | Maintainer / Scientific reviewer |
+| Curators grade the same card differently (no conflict-aggregation policy) | Medium | Medium | Documented contradiction-aggregation policy + taxonomy; second-curator inter-rater κ metric; contradiction-detection recall test | Scientific reviewer |
+| Sibling overlap: duplicated engine work / double-covered Ewing indications | Medium | Medium | Shared `target-evidence-core` engine; declared non-overlap rule (cancer-wide panel excludes Ewing/sarcoma); panel selection checked against sibling territory | Maintainer / Governance |
+| Card over-promotes a tractable-but-toxic target (association-only) | Medium | Medium | Mandatory `targetSafety` dimension (genetic constraint, essentiality, expression breadth); absence-of-evidence recorded, not hidden | Scientific reviewer |
 | Card read as medical/treatment advice | Medium | High | Persistent "research use — not medical advice" notice; patient-facing layer **blocked** behind oncologist + advocate sign-off; no per-patient ranking; routes to oncologist | Maintainer / Oncologist reviewer |
 | LLM hallucinates or misattributes an extracted claim | Medium | High | LLM assists only; **every** extracted assertion human-verified with span citation; no-source-no-claim rule; uncited assertion fails CI | Scientific reviewer / Maintainer |
 | Source version drift silently makes cards stale | High | Medium | Pinned source versions + manifest; `lastVerified`/`validUntil` **staleness fail-safe** auto-flags/withholds; refresh cadence (M6) | Maintainer |
@@ -604,27 +811,68 @@ stable; the patient-facing layer is expanded only with continued oncologist + ad
 
 ---
 
+## Adjacent opportunities
+
+These are **not v1 scope** but are the natural, high-leverage extensions the architecture enables:
+
+- **`target-evidence-core` (the highest-leverage spin-off).** The schema + compliance gate + rubric +
+  assembler factored as a **reusable library** that all card projects instantiate (cancer-wide,
+  Ewing-specific, and future non-cancer rare-disease). This resolves the sibling overlap and is the
+  structural payoff of v0.2.
+- **Ewing sibling integration.** `ewing-drug-target-evidence` and `ewing-biomarker-evidence-cards` are
+  deep single-disease pilots feeding the shared engine; the biomarker repo reuses the same
+  provenance/grading machinery on a biomarker schema.
+- **`oncogene-knowledge-graph`.** Emit the cards as RDF/graph triples (target–evidence–source) with
+  **licence-class edges** — a provenance-first open knowledge graph other tools can query.
+- **`biomarker-extraction`.** Generalize the PMC-OA span-cited extraction pipeline as a standalone
+  open biomarker/assertion-extraction service.
+- **`ewing-immunotherapy-target-catalog`.** A modality-specific instance (surface antigens / IO
+  targets) on the same engine.
+- **`target-evidence-mcp` (MCP server).** Expose the cards + provenance/licence ledger as an MCP tool
+  so any agent can query "open, cited evidence for target X in cancer Y" with attribution and grades —
+  a natural agent-ecosystem distribution channel and a candidate **contribution/overlay deliverable**
+  if the project pivots into Open Targets/Pharos/CIViC.
+- **Reuse-compliance toolkit.** The licence-class registry + transitive-SA tracker spun out as a
+  generic open-data licence-compliance linter, useful well beyond cancer.
+
+---
+
 ## Open questions
 
 - **Dataset licence: CC-BY-4.0 vs CC-BY-SA-4.0?** Share-alike sources (ChEMBL, HPA, IUPHAR) may
-  force SA on combined records. Options: (i) dual-license affected fields, (ii) pointer-only for SA
-  data (no copied values), (iii) release the whole dataset CC-BY-SA. **Needs an Elyos governance
-  decision before SA-source data is copied into output.**
+  force SA on combined records — **including transitively** via even CC0 Open Targets (which ingests
+  ChEMBL). Options: (i) dual-license affected fields, (ii) pointer-only for SA data (no copied
+  values), (iii) release the whole dataset CC-BY-SA. **v0.2 view:** option (ii)/(iii) is the *safer*
+  default and CC-BY-4.0 is the riskier one; **needs an Elyos governance decision before SA-source
+  data is copied into output.**
+- **Sibling boundary (engine + non-overlap).** Will the three card repos share **one
+  `target-evidence-core` engine**, and will the cancer-wide panel **exclude** the Ewing/sarcoma
+  indications the sibling owns? (v0.2 assumes **yes** to both.) If not, how is double coverage
+  justified?
 - **Which cancer indication + target panel first? — decided in M0, not deferred,** because it gates
   M2–M6 (corpus, licence surface, reviewer profile). Selection criteria, scored before M2: (1) strong
   **open-data** coverage (good Open Targets/DepMap/ChEMBL signal); (2) **public-research value**, with
-  **rare cancers prioritised** (thin commercial intelligence, high marginal benefit); (3) an
-  **available scientific reviewer** for that biology; (4) **tractable scope** (a panel of ~10–25
-  targets, not the genome). The specific choice is `TO BE SECURED`, but the **rule + deadline
-  (2026-08-31) are fixed**.
-- **Is the patient-facing layer (M5) pursued at all, or research-only?** Default: research-only ships
-  first; M5 is pursued **only** if an oncologist + advocate pair is secured. Governance/steward call.
+  **rare cancers prioritised** (thin commercial intelligence, high marginal benefit) — **checked
+  against the Ewing sibling's territory to avoid collision**; (3) an **available scientific reviewer**
+  for that biology; (4) **tractable scope** (a panel of ~10–25 targets, not the genome). The specific
+  choice is `TO BE SECURED`, but the **rule + deadline (2026-08-31) are fixed**.
+- **Grading rubric** — adopt/adapt which **published, cited** scheme (Open Targets harmonic-sum
+  datatype components? a levels-of-evidence variant?), and will it carry the **separate
+  `evidenceQuality` vs. `evidenceMaturity` axes** v0.2 specifies (not GRADE)? Needs scientific-reviewer
+  input and must be published with the dataset.
+- **DepMap handling** — pin to which algorithm baseline (Chronos), and is **cross-project
+  (Broad + Sanger) replication required** before a dependency assertion may grade above "Limited"?
+- **Safety dimension** — will cards include on-target-safety / genetic-constraint signals (v0.2
+  default: **yes**), or stay association-only (and thus risk over-promoting toxic-but-tractable
+  targets)?
+- **Is the patient-facing layer (M5) pursued at all, or research-only?** Default (v0.2): **deferred
+  out of v1**; research-only ships first; M5 is pursued **only** if an oncologist + advocate pair is
+  secured. Governance/steward call.
 - **Reviewer compensation/credit model** — volunteer vs. a future funded lane for review hours (hard
   budget cap) without compromising independence (mirrors the COI/independence rules in *Governance*).
-- **Grading rubric** — adopt/adapt Open Targets association scoring, a GRADE-like tier, or a hybrid?
-  Needs scientific-reviewer input and must be published with the dataset.
-- **Contribution path** — if pivoting (no standalone beneficiary), which open initiative (Open
-  Targets, Pharos/IDG, DGIdb) best absorbs the cards as a curated overlay, and under what terms?
+- **Contribution / pivot path** — if no standalone beneficiary by ~2027-03-31, which open initiative
+  best absorbs the cards as a curated overlay, and under what terms: Open Targets, Pharos/IDG, **CIViC**
+  (the closest open, CC0, community-curated analogue), or an **MCP overlay**?
 
 ---
 
@@ -737,3 +985,66 @@ guardrails. Findings and fixes:
 Sign-off: **Draft complete and internally consistent; ready for maintainer + compliance-reviewer
 review.** Not yet ready to *ship* — gated on a secured scientific reviewer (M2), a secured beneficiary
 (Definition of Shipped), and the share-alike licence decision.
+
+---
+
+## Changelog — v0.2 (analysis merged)
+
+This version merges `COMPETITIVE-ANALYSIS.md` (2026-06-29) into the plan. No facts were invented;
+guardrails were preserved or strengthened, never weakened.
+
+**Correctness / schema / licence fixes applied**
+
+- **Grading rubric corrected.** Dropped GRADE (which grades clinical-outcome certainty); adopted a
+  **cited** scheme (Open Targets harmonic-sum / levels-of-evidence). **Split the single grade into two
+  axes** — `evidenceQuality` × `evidenceMaturity` (in-silico/in-vitro/in-vivo/human-genetic/
+  clinical-aggregate), maturity **weighted** by the genetic-support literature (Nelson 2015, Minikel
+  2024). (Goals; Solution §2; Data model; Metrics; M0/M2.)
+- **Preclinical-vs-clinical** made a **separate, structurally-enforced weighted axis** (`evidenceMaturity`)
+  so a DepMap cell-line signal cannot be read as clinical readiness. (Solution §2; Data model.)
+- **DepMap treated as algorithm-version-sensitive** (CERES→Chronos at 21Q2; Broad/Sanger batch
+  effects, ComBat). Dependency assertions now **pin release + scoring algorithm + screen project** and
+  carry `replicatesAcrossProjects` / lineage / common-essential caveats; **"byte/field-stable"
+  reproducibility replaced with "manifest-diff-explainable."** (Solution §3; Data model; Metrics;
+  Provenance; M1; Risks.)
+- **Contradiction policy operationalized:** documented aggregation policy + **taxonomy**
+  (measurement-difference / biological-context-dependence / version-drift), `netRead`, and a
+  **contradiction-detection recall** metric. (Solution §4; Data model; Metrics; M2; Risks.)
+- **ChEMBL CC-BY-SA share-alike resolved:** added a distinct **`open-sa` licence class**, **transitive
+  upstream-of-upstream provenance** tracking (SA via CC0 Open Targets), and a stated lean toward
+  **CC-BY-SA / pointer-only** as the safer default. (Data §allowlist/§share-alike; Provenance; Output
+  licensing; Risks; Open questions.)
+- **Sibling differentiation operationalized:** a shared **`target-evidence-core` engine** (one
+  schema/gate/rubric/assembler) consumed by `ewing-drug-target-evidence` and
+  `ewing-biomarker-evidence-cards`, with this cancer-wide panel **excluding** Ewing/sarcoma
+  indications the sibling owns. (Goals; Scope; Competitive landscape §7; Adjacent opportunities; M0;
+  Open questions; Risks.)
+- **Other fixes:** Ensembl licence verified **per data type**; **target-safety / on-target-liability**
+  fields added; **absence-of-evidence** made first-class; **per-card change-log** added;
+  ClinicalTrials.gov constrained further (**no ranking by trial activity, no recruiting-trial links**);
+  metrics hardened (**inter-rater κ**; independent + decision-informing qualitative bars on
+  reproduction/use).
+
+**Strategy integrated**
+
+- New **"Competitive landscape & differentiation"** section (Open Targets, Pharos/IDG/TCRD, canSAR
+  Black, DGIdb, OncoKB [excluded], CIViC, My Cancer Genome [abandoned], Probe Miner, DepMap), with the
+  seven differentiators — anchored on **per-assertion verified licence-class provenance (provably
+  CC-BY-clean) + a version-pinned build manifest.**
+- **Claude API leverage folded into architecture** (Solution §5): PMC-OA span-level-cited extraction
+  under per-article licence checks; schema-constrained structuring/normalizing; cross-source
+  contradiction **detection (surface, never resolve)** — with explicit **hard human gates** (no
+  clinical/per-patient recommendations; no final grade/card; no licence or medical/legal
+  determination; open-access content only).
+- **Optimizations folded into the Roadmap** (M0/M1/M2/M5) and the patient-facing layer **deferred out
+  of v1**.
+- New **"Adjacent opportunities"** section (`target-evidence-core` engine; ties to
+  `oncogene-knowledge-graph` / `biomarker-extraction` / `ewing-immunotherapy-target-catalog`; an MCP
+  server; a reuse-compliance toolkit).
+- **Open questions merged** (transitive-SA licence default, sibling boundary, DepMap baseline, safety
+  dimension, CIViC/MCP pivot path).
+
+**Preserved unchanged:** all cancer-domain guardrails (open data only; per-source licence verify;
+provenance per assertion; research-not-advice), the compliance-gate-first posture, the two-tier risk
+model with blocking HIGH-tier patient-facing sign-off, the honest `TO BE SECURED` / `verifiedNeed:
+false` stance, and the dated partner/mothball-pivot rule.

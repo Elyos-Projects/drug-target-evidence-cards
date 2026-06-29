@@ -1,6 +1,6 @@
 # Drug-Target-Evidence-Cards — TASKS.md
 
-> Status: Draft · Version: 0.1.0 · Last updated: 2026-06-28 · Owner: TBD (maintainer) · Lane: donated
+> Status: Draft · Version: 0.2.0 · Last updated: 2026-06-29 · Owner: TBD (maintainer) · Lane: donated
 
 Backlog for **Drug-Target-Evidence-Cards** (slug: `drug-target-evidence-cards`): an open, source-cited
 library of drug-target evidence cards for cancer, built **for researchers/curators/advocates** and
@@ -51,9 +51,9 @@ Reviewer "Scientific reviewer" = qualified cancer-biology/bioinformatics curator
 
 | ID | Title | Type | Size | Risk | Deliverable | Depends on | Reviewer |
 |---|---|---|---|---|---|---|---|
-| drug-target-evidence-cards-compliance-001 | Data-licensing & provenance compliance gate: source allowlist + licence registry + licence-class + per-assertion citation + identifiability guard (CI) | code | large | high | pr | — | Compliance reviewer + Maintainer |
-| drug-target-evidence-cards-schema-002 | Evidence Card JSON Schema + evidence-grading rubric | design-spec | medium | medium | document | — | Scientific reviewer + Maintainer |
-| drug-target-evidence-cards-panel-003 | Indication + target-panel selection (scored criteria; rare cancers prioritised) — gates M2–M6 | research | small | medium | document | — | Scientific reviewer + Maintainer |
+| drug-target-evidence-cards-compliance-001 | Data-licensing & provenance compliance gate: source allowlist + licence registry (`open`/`open-sa`/`NC`/`excluded` + transitive SA tracking) + per-assertion citation + identifiability guard (CI) | code | large | high | pr | — | Compliance reviewer + Maintainer |
+| drug-target-evidence-cards-schema-002 | Evidence Card JSON Schema + cited grading rubric (`evidenceQuality` × `evidenceMaturity`; no GRADE) + target-safety fields — built as shared `target-evidence-core` | design-spec | medium | medium | document | — | Scientific reviewer + Maintainer |
+| drug-target-evidence-cards-panel-003 | Indication + target-panel selection (scored criteria; rare cancers prioritised; **excludes Ewing/sarcoma owned by sibling**) — gates M2–M6 | research | small | medium | document | — | Scientific reviewer + Maintainer |
 | drug-target-evidence-cards-repo-004 | Monorepo + pnpm + TS/ESM + CI (build/test/lint) skeleton with core/adapter split | code | small | low | pr | — | Maintainer |
 | drug-target-evidence-cards-exemplar-005 | One hand-curated exemplar card (fully cited, graded, "not medical advice") for review | data | medium | medium | dataset | 001, 002, 003 | Scientific reviewer + Compliance reviewer |
 
@@ -61,9 +61,13 @@ Reviewer "Scientific reviewer" = qualified cancer-biology/bioinformatics curator
 
 - **drug-target-evidence-cards-compliance-001** (compliance gate)
   - Ships a checked-in **source allowlist + licence registry** mapping each permitted source to its
-    licence, `licenseClass` (`open` | `non-commercial` | `controlled-access-excluded`), attribution
-    string, and reuse notes; a source not in the registry **cannot** be ingested.
-  - Enforces **licence-class rules**: only `open`-class data may enter the CC-BY output;
+    licence, `licenseClass` (`open` | **`open-sa`** | `non-commercial` | `controlled-access-excluded`),
+    attribution string, **`upstreamProvenance[]` (transitive source-of-source)**, and reuse notes; a
+    source not in the registry **cannot** be ingested.
+  - Enforces **licence-class rules**: only `open`/`open-sa`-class data may enter the output;
+    **`open-sa` (CC-BY-SA: ChEMBL, HPA, IUPHAR) propagates share-alike obligations — tracked
+    transitively even when arriving via a CC0 aggregator (Open Targets ingests ChEMBL) — and is held
+    pending the dataset-licence governance decision before any SA values are copied**;
     `non-commercial` (COSMIC/OncoKB) is excluded from card content (pointer-only); controlled-access
     (dbGaP/EGA/biobank) is hard-blocked. A violation **fails CI**.
   - Enforces **per-assertion citation** ("no source, no claim") and an **identifiability guard** that
@@ -74,17 +78,26 @@ Reviewer "Scientific reviewer" = qualified cancer-biology/bioinformatics curator
 
 - **drug-target-evidence-cards-schema-002** (card schema + rubric)
   - JSON Schema for the Evidence Card per the PLAN data model (target IDs, indication ontology id,
-    `associationEvidence[]` with `evidenceType`/`grade`/`sources[]`, tractability, knownDrugs as
-    research context, aggregate clinicalLandscape, contradictions, provenance, review, disclaimer).
-  - A published, versioned **evidence-grading rubric** (tiers keyed to evidence type + source
-    strength); every assertion must carry a grade.
-  - `clinicalLandscape` constrained to **aggregate** counts; no field can express a per-patient
-    recommendation. Constant "research use — not medical advice" disclaimer required.
+    `associationEvidence[]` with `evidenceType`/**`evidenceQuality`**/**`evidenceMaturity`**/
+    **`isAbsenceOfEvidence`**/`sources[]`, **`dependencyDetail` (DepMap release+algorithm+screen
+    project+`replicatesAcrossProjects`)**, **`targetSafety`**, tractability, knownDrugs as research
+    context, aggregate clinicalLandscape, `contradictions[]` with **taxonomy + `netRead`**,
+    **`changeLog[]`**, provenance with `licenseClass`/`upstreamProvenance[]`, review, disclaimer).
+  - A published, versioned, **cited evidence-grading rubric on two separate axes** — `evidenceQuality`
+    (study strength) × `evidenceMaturity` (in-silico/in-vitro/in-vivo/human-genetic/clinical-aggregate,
+    weighted per Nelson 2015 / Minikel 2024) — **adapting a published scheme (Open Targets harmonic-sum
+    / levels-of-evidence), NOT GRADE**; every assertion must carry **both** axes.
+  - Schema/gate/rubric authored as the shared **`target-evidence-core`** engine the sibling repos
+    consume.
+  - `clinicalLandscape` constrained to **aggregate** counts; **no ranking by trial activity; no links
+    to recruiting trials**; no field can express a per-patient recommendation. Constant "research use
+    — not medical advice" disclaimer required.
 
 - **drug-target-evidence-cards-panel-003** (indication + target-panel selection)
   - Scores candidates against explicit criteria: (1) strong open-data coverage; (2) public-research
-    value with **rare cancers prioritised**; (3) an available scientific reviewer for that biology;
-    (4) tractable scope (~10–25 targets).
+    value with **rare cancers prioritised** — **checked against the Ewing sibling's territory to avoid
+    collision (cancer-wide panel excludes Ewing/sarcoma indications the sibling owns)**; (3) an
+    available scientific reviewer for that biology; (4) tractable scope (~10–25 targets).
   - Records the decision (or shortlist + the 2026-08-31 deadline) with rationale; the chosen
     indication/panel becomes a dependency for M2 card tasks.
 
@@ -108,30 +121,41 @@ fixed decision)**.
 |---|---|---|---|---|---|---|---|
 | drug-target-evidence-cards-adapters-006 | Source adapters for core open sources (Open Targets, ChEMBL, UniProt, Ensembl, Reactome, HPA, DepMap, ClinicalTrials.gov aggregate) with pinned versions | code | large | medium | pr | 001, 004 | Maintainer + Compliance reviewer |
 | drug-target-evidence-cards-assemble-007 | ID mapping (HGNC/Ensembl/UniProt; EFO/MONDO/OncoTree) + assembler with contradiction surfacing | code | large | medium | pr | 002, 006 | Maintainer + Scientific reviewer |
-| drug-target-evidence-cards-validate-008 | Validation + build manifest (pinned versions/hashes) + staleness fail-safe (`lastVerified`/`validUntil`) | code | medium | medium | pr | 006, 007 | Maintainer + Compliance reviewer |
+| drug-target-evidence-cards-validate-008 | Validation + build manifest (pinned versions/**algorithms**/hashes; **manifest-diff-explainable**) + staleness fail-safe (`lastVerified`/`validUntil`) + contradiction-recall test | code | medium | medium | pr | 006, 007 | Maintainer + Compliance reviewer |
 
 **Acceptance criteria — key tasks**
 
 - **drug-target-evidence-cards-adapters-006** (source adapters)
   - One adapter per open source; each declares its registry entry, **pins the release/version**,
     records `retrievalDate`, and emits normalised facts with attached provenance.
+  - **DepMap adapter pins release + scoring algorithm (e.g. Chronos) + screen project (Broad/Sanger)**
+    and emits `replicatesAcrossProjects`, lineage-specificity, and common-essential caveats per
+    dependency assertion (a single un-replicated project signal may not grade above "Limited").
+  - **Ensembl adapter verifies licence per data type** (not blanket-classed; some incorporated
+    datasets carry third-party terms).
   - Adapters live in `adapters/` (vendor/source-specific); the pipeline core stays neutral.
-  - ClinicalTrials.gov adapter emits **aggregate counts/phases only** (no patient-level data; not a
-    trial-matching tool). Any source not in the registry is rejected by the gate.
+  - ClinicalTrials.gov adapter emits **aggregate counts/phases only** (no patient-level data; **no
+    ranking by trial activity; no recruiting-trial links**; not a trial-matching tool). Any source not
+    in the registry is rejected by the gate.
 
 - **drug-target-evidence-cards-assemble-007** (ID mapping + assembler)
   - Resolves targets to canonical HGNC/Ensembl/UniProt IDs and indications to an ontology id;
     cross-checks IDs across sources to avoid gene/target conflation.
-  - **Surfaces contradictions** (disagreeing sources) on the card rather than silently choosing one.
-  - Emits cards conforming to the schema with grades + provenance on every assertion.
+  - **Surfaces contradictions** (disagreeing sources) on the card rather than silently choosing one,
+    applying the documented **contradiction-aggregation policy** and tagging each with the **taxonomy**
+    (`measurement-difference` / `biological-context-dependence` / `version-drift`) + a `netRead`.
+  - Emits cards conforming to the schema with **both grade axes** + provenance on every assertion.
 
 - **drug-target-evidence-cards-validate-008** (validation + manifest + staleness)
-  - Runs the compliance gate, schema validation, and grade-coverage in CI; emits a reproducible
-    **build manifest** (every source + version + retrieval date + hash).
+  - Runs the compliance gate, schema validation, and **both-axes grade-coverage** in CI; emits a
+    reproducible **build manifest** (every source + version + **scoring algorithm + screen project** +
+    retrieval date + hash).
   - Staleness fail-safe: an assertion whose source is past `validUntil` is **auto-flagged**; a
     staleness test asserts no card serves as "current" past its window.
-  - The M0 exemplar card is regenerated **reproducibly** by the pipeline (matches the hand-curated
-    version modulo recorded source-version diffs).
+  - **Contradiction-detection recall** test runs against a seeded gold set of known disagreements.
+  - The M0 exemplar card is regenerated **manifest-diff-explainably** by the pipeline — every value
+    change is explained by a recorded source-release/algorithm diff (**not byte-stable**, since
+    upstream rescoring legitimately changes values).
 
 **M1 Definition of Done:** reproducible ingest → assemble → validate pipeline over pinned open
 sources; ID mapping + contradiction surfacing; build manifest; compliance gate + provenance validator
@@ -156,13 +180,16 @@ sources; ID mapping + contradiction surfacing; build manifest; compliance gate +
     the share-alike governance decision before its data is copied.
 
 - **drug-target-evidence-cards-cards-010** (research cards)
-  - Cards for the chosen panel × indication assembled; **every assertion cited + graded**;
-    contradictions surfaced; aggregate-only clinical landscape; "research use — not medical advice"
-    on every card; compliance gate green.
+  - Cards for the chosen panel × indication assembled (**excluding Ewing/sarcoma**); **every assertion
+    cited + graded on both axes (`evidenceQuality` × `evidenceMaturity`)**; `targetSafety` populated;
+    contradictions surfaced **and taxonomy-tagged**; aggregate-only clinical landscape (no trial-
+    activity ranking); "research use — not medical advice" on every card; compliance gate green.
 
 - **drug-target-evidence-cards-review-011** (scientific sign-off)
-  - A qualified scientific reviewer verifies accuracy, grading, and faithful sourcing of each card;
-    **sign-off recorded (version-scoped)** in the reviewers ledger before release.
+  - A qualified scientific reviewer verifies accuracy, grading (both axes), and faithful sourcing of
+    each card; **sign-off recorded (version-scoped)** in the reviewers ledger before release.
+  - A **second-curator inter-rater reliability (Cohen's κ)** is computed on a sampled set of
+    assertions and reported per release (directly measures the project's core value).
   - **Kill-gate:** if the reviewer judges the synthesis no more reliable/useful than reading raw
     sources, the project **pauses and reassesses** before scaling card production.
 
@@ -218,10 +245,11 @@ complete attribution manifest and reproduction instructions; a third-party repro
 
 ---
 
-## Milestone M5 — Patient-facing plain-language layer (HIGH-tier, OPTIONAL, blocking-gated)
+## Milestone M5 — Patient-facing plain-language layer (HIGH-tier, OPTIONAL, DEFERRED OUT OF v1, blocking-gated)
 
-> **Builds only if** a credentialed **oncologist** AND a **patient advocate** are secured. **No
-> oncologist + advocate sign-off, no patient-facing release.**
+> **Deferred out of v1 by default** (to shorten the reviewer-acquisition critical path). **Builds only
+> if** a credentialed **oncologist** AND a **patient advocate** are secured. **No oncologist + advocate
+> sign-off, no patient-facing release.**
 
 | ID | Title | Type | Size | Risk | Deliverable | Depends on | Reviewer |
 |---|---|---|---|---|---|---|---|
@@ -275,6 +303,8 @@ a rotation owning it, an ops runbook, and outcomes tracked.
 | drug-target-evidence-cards-i18n-020 | Translations of patient-facing layer (per-language review) | writing | medium | high | translation | Only after M5; oncologist/advocate + native review per language |
 | drug-target-evidence-cards-contribute-021 | Contribute cards as a curated overlay to an open initiative (Open Targets/Pharos/DGIdb) | data | medium | medium | dataset | Pivot path from the build-vs-mothball rule |
 | drug-target-evidence-cards-cosmic-022 | COSMIC/OncoKB pointer-reference integration (NC-safe, no copied data) | code | small | medium | pr | Pointer-only under their terms; never redistributed |
+| drug-target-evidence-cards-engine-023 | Factor schema + gate + rubric + assembler into a reusable `target-evidence-core` library consumed by the sibling card repos | code | large | medium | pr | Highest-leverage spin-off; resolves sibling overlap (Adjacent opportunities) |
+| drug-target-evidence-cards-mcp-024 | `target-evidence-mcp` server exposing cards + provenance/licence ledger to agents | code | medium | low | pr | Distribution channel + candidate contribution/overlay deliverable; open-only data |
 
 ---
 
@@ -299,12 +329,12 @@ Complete, schema-valid Task JSON for the first M0 task (`drug-target-evidence-ca
   "context": "Drug-Target-Evidence-Cards builds an open, source-cited library of drug-target evidence cards for cancer, for researchers/curators/advocates and explicitly NOT treatment advice. The binding cancer-domain guardrails require open-access/aggregate/de-identified data ONLY: controlled-access resources (dbGaP, EGA, individual-level biobanks) and any identifiable patient data are out of scope, non-commercial sources (COSMIC, OncoKB) must be excluded from the CC-BY output (pointer-only), and every assertion must be provenance-linked. This is the cold-start task that builds that compliance gate FIRST, as a CI release gate (a safety-critical subsystem, not a disclaimer), before any card or pipeline work. No partner, beneficiary, or reviewer is yet secured.",
   "objective": "Build the data-licensing & provenance compliance gate that all later ingestion and card assembly must pass: a checked-in source allowlist + licence registry with a licence-class taxonomy (open | non-commercial | controlled-access-excluded), enforcement that only open-class data enters the CC-BY output (NC excluded/pointer-only, controlled-access hard-blocked), per-article PMC-OA licence handling, per-assertion citation enforcement (no source, no claim), and an identifiability guard that rejects individual-level/row-level data shapes - all wired into CI so a violation fails the build.",
   "acceptanceCriteria": [
-    "Ships a checked-in source allowlist + licence registry mapping each permitted source to its licence, licenseClass (open | non-commercial | controlled-access-excluded), attribution string, version, and reuse notes; a source not in the registry cannot be ingested",
-    "Enforces licence-class rules: only open-class data may enter the CC-BY output; non-commercial sources (COSMIC, OncoKB) are excluded from card content (pointer-only); controlled-access sources (dbGaP, EGA, individual-level biobanks) are hard-blocked - a violation fails CI",
+    "Ships a checked-in source allowlist + licence registry mapping each permitted source to its licence, licenseClass (open | open-sa | non-commercial | controlled-access-excluded), attribution string, upstreamProvenance (transitive source-of-source), version, and reuse notes; a source not in the registry cannot be ingested",
+    "Enforces licence-class rules: only open/open-sa-class data may enter the output; open-sa (CC-BY-SA: ChEMBL, HPA, IUPHAR) propagates share-alike obligations tracked transitively (even via the CC0 Open Targets aggregator, which ingests ChEMBL) and is held pending the dataset-licence governance decision; non-commercial sources (COSMIC, OncoKB) are excluded from card content (pointer-only); controlled-access sources (dbGaP, EGA, individual-level biobanks) are hard-blocked - a violation fails CI",
     "Enforces per-assertion citation ('no source, no claim'): a card with any uncited assertion fails validation",
     "Includes an identifiability guard that rejects individual-level / row-level genomic or clinical data shapes at ingest",
     "Handles PMC Open Access per-article licence: only CC-BY/CC0 articles may contribute copied text/close paraphrase to a CC-BY card; CC-BY-NC / ND articles may be cited and linked but not quoted/redistributed",
-    "Flags CC-BY-SA (share-alike) sources for the governance licence decision before their data is copied into output",
+    "Flags CC-BY-SA (open-sa) sources - including SA content arriving transitively via CC0 aggregators - for the dataset-licence governance decision before any SA data is copied into output",
     "Runs in CI (build fails on any disallowed/uncited/NC-in-output/controlled-access violation); decisions reviewed and recorded by the compliance reviewer",
     "No secrets, tokens, or PII written to logs, manifests, or committed files"
   ],
