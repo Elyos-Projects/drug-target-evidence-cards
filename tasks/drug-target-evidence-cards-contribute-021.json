@@ -1,0 +1,32 @@
+{
+  "id": "drug-target-evidence-cards-contribute-021",
+  "title": "Contribute evidence cards as a curated overlay to an open initiative (Open Targets / Pharos / DGIdb / CIViC) — pivot path from build-vs-mothball rule",
+  "project": "drug-target-evidence-cards",
+  "type": "data",
+  "lane": "donated",
+  "priority": "low",
+  "domain": ["cancer", "bioinformatics", "open-data", "data-curation"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "dataset",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "If no standalone beneficiary is secured by approximately 2027-03-31, the project's build-vs-mothball/pivot rule requires either contributing the cards to an existing open initiative (Open Targets, Pharos/IDG, DGIdb, or CIViC as the closest open CC0 community-curated analogue) or mothballing to maintenance-only. This task covers the contribution/pivot path: preparing the evidence cards + pipeline as a curated overlay for an open initiative under agreed terms. Even outside the mothball scenario, contributing to an existing initiative is a high-leverage distribution path.",
+  "objective": "Prepare and contribute the evidence card dataset and pipeline as a curated overlay to a chosen open initiative (Open Targets, Pharos/IDG, DGIdb, or CIViC), adapting the card format to the target initiative's schema/API, ensuring licence compatibility (CC-BY-4.0 or CC-BY-SA per the governance decision, compatible with the target's CC0/open licence), and coordinating with the initiative's maintainers on the contribution process.",
+  "acceptanceCriteria": [
+    "Target open initiative selected (Open Targets, Pharos/IDG, DGIdb, or CIViC) with rationale: best fit for the card format, open licence compatibility, community scope, and contribution pathway",
+    "Licence compatibility verified: the evidence card dataset's output licence is compatible with the target initiative's licence (e.g. CC-BY-4.0 into CC0 contribution requires attribution; CC-BY-SA compatibility verified)",
+    "Card data adapted to the target initiative's contribution format (schema mapping, ID alignment, provenance fields) while preserving the project's compliance records and grading",
+    "Contribution submitted to or coordinated with the target initiative's maintainers; contribution status (accepted, pending, rejected with reason) recorded in the repository",
+    "If the contribution path is taken as the mothball-pivot, the repository records the pivot decision with rationale and the state of the pipeline and cards at handoff"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A curated overlay contribution of the evidence card dataset to a chosen open initiative, with licence compatibility confirmed and contribution status recorded — the pivot path from the build-vs-mothball decision rule.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "drug-target-evidence-cards-cards-010",
+  "title": "Assemble research evidence cards for the chosen target panel (cited, graded on both axes, contradictions surfaced, not medical advice)",
+  "project": "drug-target-evidence-cards",
+  "type": "data",
+  "lane": "donated",
+  "priority": "high",
+  "domain": ["cancer", "bioinformatics", "open-data", "research", "data-curation"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "dataset",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "With the compliance gate, schema, assembler, and per-source licence verification complete, the core deliverable of the project is to assemble evidence cards for the chosen target panel and cancer indication. Each card must cite every assertion to an open-class source, grade it on both axes (evidenceQuality x evidenceMaturity), surface contradictions with taxonomy tags, populate targetSafety, and carry the 'not medical advice' disclaimer. Cards for Ewing/sarcoma indications are excluded. This depends on the assembler (007), the validator (008), and the per-source licence verification (009).",
+  "objective": "Assemble research evidence cards for the full chosen target panel x indication using the automated pipeline (assembler + validator), with every assertion cited, graded on both evidenceQuality and evidenceMaturity axes, targetSafety populated, contradictions surfaced and taxonomy-tagged, clinicalLandscape restricted to aggregate counts only, and the 'research use - not medical advice' disclaimer on every card. Cards must pass the compliance gate and schema validation. Ewing/sarcoma indications are excluded.",
+  "acceptanceCriteria": [
+    "Research evidence cards assembled for all targets in the chosen panel x indication (excluding Ewing/sarcoma indications, which are owned by sibling repos)",
+    "Every assertion on every card is cited to at least one open-class source with full provenance (sourceName, accession, releaseVersion, retrievalDate, url, license, licenseClass, upstreamProvenance[])",
+    "Every assertion carries both evidenceQuality and evidenceMaturity grades per the rubric; no assertion is left ungraded on either axis; schema validation confirms grade-coverage is 100%",
+    "targetSafety is populated for every card (geneticConstraint, essentiality, expressionBreadth, onTargetLiabilityNote) so tractable-but-toxic targets are not over-promoted by association strength alone",
+    "Contradictions (disagreeing sources) are surfaced on every affected card, taxonomy-tagged (measurement-difference, biological-context-dependence, or version-drift), and summarised with a netRead under the documented contradiction-aggregation policy",
+    "clinicalLandscape contains aggregate trial counts and phases only; no patient-level data; no trial-activity ranking; no links to recruiting trials",
+    "The constant 'not medical advice' disclaimer is present on every card; no card field expresses a per-patient recommendation, therapy ranking, or trial-selection guidance",
+    "All cards pass the compliance gate (allowlist + licence-class + per-assertion citation + identifiability guard) and schema validation in CI",
+    "Build manifest is emitted alongside the cards, listing every source version and scoring algorithm used"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md",
+    "docs/good-deed-definition.md"
+  ],
+  "output": "The assembled research evidence card dataset for the chosen target panel x indication (committed to the repository or dataset storage), every assertion cited and graded, compliance gate green, build manifest emitted — the primary research deliverable of the project, pending scientific-reviewer sign-off (011).",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

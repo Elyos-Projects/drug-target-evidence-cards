@@ -1,0 +1,36 @@
+{
+  "id": "drug-target-evidence-cards-adapters-006",
+  "title": "Source adapters for core open sources (Open Targets, ChEMBL, UniProt, Ensembl, Reactome, HPA, DepMap, ClinicalTrials.gov aggregate) with pinned versions",
+  "project": "drug-target-evidence-cards",
+  "type": "code",
+  "lane": "donated",
+  "priority": "high",
+  "domain": ["cancer", "bioinformatics", "open-data", "software"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "The ingestion pipeline requires one adapter per open data source to fetch, normalise, and provenance-tag evidence facts before card assembly. Each adapter must declare its registry entry, pin the source release/version, record retrievalDate, and emit normalised facts with attached provenance. Adapters live in adapters/sources/* (vendor/source-specific); the pipeline core stays neutral. DepMap requires special handling: it is algorithm-version-sensitive (CERES vs Chronos) and has cross-project batch effects between Broad and Sanger screens. ClinicalTrials.gov must emit aggregate counts only. This depends on the compliance gate (001) and the monorepo skeleton (004).",
+  "objective": "Build one adapter per core open source — Open Targets (GraphQL), ChEMBL, UniProt, Ensembl, Reactome, Human Protein Atlas, DepMap, and ClinicalTrials.gov — each living in adapters/sources/, each declaring its source registry entry from the compliance gate, pinning the release version, recording retrievalDate, and emitting normalised facts with provenance. DepMap adapter must pin release + scoring algorithm (e.g. Chronos) + screen project (Broad/Sanger) and emit replicatesAcrossProjects, lineage-specificity, and common-essential caveats. ClinicalTrials.gov adapter emits aggregate counts/phases only. Sources not in the registry are rejected.",
+  "acceptanceCriteria": [
+    "One adapter per open source implemented in adapters/sources/: Open Targets (GraphQL), ChEMBL, UniProt, Ensembl, Reactome, Human Protein Atlas (HPA), DepMap (Broad, CC-BY 4.0), ClinicalTrials.gov",
+    "Each adapter declares its source registry entry from the compliance gate, pins the release/version, records retrievalDate, and emits normalised facts with attached provenance (sourceName, accession, releaseVersion, retrievalDate, url, license, licenseClass, upstreamProvenance[])",
+    "DepMap adapter pins release + scoring algorithm (e.g. Chronos, not CERES) + screen project (Broad/Sanger) and emits replicatesAcrossProjects flag, lineageSpecificity note, and common-essential caveats per dependency assertion; a single un-replicated project signal cannot be elevated above 'Limited' grade by the adapter",
+    "Ensembl adapter verifies and records licence per data type pulled (not blanket-classed: some incorporated datasets carry third-party terms)",
+    "ClinicalTrials.gov adapter emits aggregate trial counts and phases only (no patient-level data, no recruiting-trial links, no trial-activity ranking); the adapter is not a trial-matching tool and carries an explicit 'not trial-matching' note in its output",
+    "Any source not present in the compliance gate registry is rejected by the adapter with a CI-failing error",
+    "Open Targets adapter correctly tracks ChEMBL-derived content as open-sa class transitively (upstreamProvenance includes ChEMBL) even though Open Targets is CC0",
+    "All adapters live in adapters/ (not in core packages); no vendor-specific logic enters packages/*",
+    "pnpm build && pnpm test && pnpm lint pass with adapters included"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A merged PR adding one adapter per core open source in adapters/sources/, each with pinned versions, provenance tagging, and registry-gate enforcement — the ingestion layer that the assembler (007) and validator (008) build on.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

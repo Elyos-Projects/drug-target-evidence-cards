@@ -1,0 +1,31 @@
+{
+  "id": "drug-target-evidence-cards-panel-003",
+  "title": "Indication + target-panel selection (scored criteria; rare cancers prioritised; excludes Ewing/sarcoma owned by sibling) — gates M2-M6",
+  "project": "drug-target-evidence-cards",
+  "type": "research",
+  "lane": "donated",
+  "priority": "high",
+  "domain": ["cancer", "bioinformatics", "open-data", "research"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "small",
+  "status": "open",
+  "context": "Before any research cards can be assembled, the project must decide which cancer indication and initial target panel to build cards for. This decision must be made in M0 because it determines the source corpus, the licence surface, and the required scientific-reviewer profile for M2-M6. The selection must use explicit scored criteria, prioritise rare cancers (where commercial intelligence is thin and marginal benefit is high), and explicitly exclude Ewing/sarcoma indications owned by the sibling repos. Decision deadline is 2026-08-31. No scientific reviewer or beneficiary partner is yet secured.",
+  "objective": "Score and select the initial cancer indication and target panel against explicit criteria: (1) strong open-data coverage (Open Targets/DepMap/ChEMBL signal); (2) public-research value with rare cancers prioritised, checked against the Ewing sibling territory to avoid double coverage; (3) availability of a scientific reviewer for that biology; (4) tractable scope (~10-25 targets). Record the decision (or a shortlist with the 2026-08-31 deadline) with rationale; the chosen indication and panel become the fixed dependency for M2 card tasks.",
+  "acceptanceCriteria": [
+    "Candidates scored against all four explicit criteria: (1) open-data coverage quality for the indication in Open Targets, DepMap, and ChEMBL; (2) public-research value with rare cancers prioritised and the Ewing/sarcoma indications (owned by ewing-drug-target-evidence and ewing-biomarker-evidence-cards sibling repos) explicitly excluded; (3) identified or prospective scientific reviewer with relevant biology expertise; (4) a tractable target panel of approximately 10-25 targets",
+    "Decision document records the chosen cancer indication and target panel with scored rationale, or records a shortlist with a fixed decision no later than 2026-08-31",
+    "Exclusion of Ewing/sarcoma indications explicitly confirmed and recorded to enforce the non-overlap rule with sibling repos",
+    "Decision is committed to the repository and referenced by the exemplar card (005) and M2 card tasks (010) as their fixed corpus"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A committed decision document recording the chosen cancer indication and initial target panel (or a scored shortlist with a 2026-08-31 decision deadline), including the scoring rationale, confirmed Ewing/sarcoma exclusion, and the required scientific-reviewer profile for that indication — serving as the fixed dependency that gates M2-M6.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

@@ -1,0 +1,34 @@
+{
+  "id": "drug-target-evidence-cards-verify-013",
+  "title": "Human verification workflow: every extracted PMC-OA assertion verified against cited span before card inclusion; enriched cards re-reviewed",
+  "project": "drug-target-evidence-cards",
+  "type": "research",
+  "lane": "donated",
+  "priority": "medium",
+  "domain": ["cancer", "bioinformatics", "research", "data-curation"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "The literature extraction pipeline (012) produces LLM-drafted candidate evidence statements that must be human-verified before entering any card. This task covers the verification workflow itself: curators check each extracted statement against its cited span, reject any unverifiable or fabricated statements, and record their decisions. Enriched cards must re-pass the compliance gate and receive renewed scientific sign-off before release. This depends on the assembled base cards (010) and the litextract pipeline (012).",
+  "objective": "Define and execute the human verification workflow for PMC-OA extracted assertions: curators verify every LLM-drafted statement against its cited text span in the source article, accept only statements that are faithfully derived from open-licence (CC-BY/CC0) text, reject any unverifiable or fabricated statements, and record acceptance/rejection with rationale. Enriched cards re-pass the compliance gate and re-receive version-scoped scientific sign-off before any release.",
+  "acceptanceCriteria": [
+    "A documented human verification workflow is committed to the repository describing how a curator reviews each extracted statement, verifies it against its cited text span in the source article, and records accept/reject with rationale",
+    "Every LLM-drafted extracted statement is individually verified by a human curator before it is accepted into a card; no unverified statement enters any released card",
+    "Fabricated or unverifiable statements (those without a faithfully citable span) are rejected and their rejection is recorded; the LLM error rate (fraction rejected) is tracked and reported per release run",
+    "NC/ND article citations (citation-only, no extracted text) are confirmed to contain no quoted or paraphrased text from the NC/ND source",
+    "Cards enriched with verified PMC-OA assertions re-pass the compliance gate and schema validation in CI",
+    "Enriched cards receive renewed version-scoped scientific-reviewer sign-off before release (referencing the updated card version and source manifest)"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md",
+    "docs/good-deed-definition.md"
+  ],
+  "output": "A committed human verification workflow document and verification records for each PMC-OA extracted assertion accepted into a card, with enriched cards re-passing the compliance gate and receiving renewed scientific sign-off — completing the M3 literature-enrichment cycle.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

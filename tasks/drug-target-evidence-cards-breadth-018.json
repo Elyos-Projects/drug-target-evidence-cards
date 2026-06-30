@@ -1,0 +1,33 @@
+{
+  "id": "drug-target-evidence-cards-breadth-018",
+  "title": "Expand evidence cards to a second cancer indication and target panel (only after M2 stable; full source-vetting + scientific sign-off)",
+  "project": "drug-target-evidence-cards",
+  "type": "data",
+  "lane": "donated",
+  "priority": "low",
+  "domain": ["cancer", "bioinformatics", "open-data", "research", "data-curation"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "dataset",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "After the first target panel and cancer indication are stable (M2 complete, scientific sign-off recorded, compliance gate green), the project may expand to a second cancer indication and target panel. This is a backlog/future task: breadth never precedes verified accuracy for the first set. The second indication must go through the full selection criteria (rare cancers prioritised, Ewing/sarcoma excluded), per-source licence verification, card assembly, and scientific reviewer sign-off — the same process as M0-M2. This is not in scope for v1.",
+  "objective": "Select and assemble research evidence cards for a second cancer indication and target panel, applying the full M0-M2 process: scored indication/panel selection (rare cancers prioritised, Ewing/sarcoma excluded), per-source licence verification for the new indication's sources, card assembly with both-axes grading and contradiction surfacing, compliance gate pass, and version-scoped scientific-reviewer sign-off before release.",
+  "acceptanceCriteria": [
+    "Task does not start until M2 (cards-010 and review-011) is stable and the first panel's cards have been publicly released and used by at least one beneficiary",
+    "Second cancer indication and target panel selected using the same scored criteria as task 003 (rare cancers prioritised, Ewing/sarcoma excluded, open-data coverage, available scientific reviewer, tractable scope)",
+    "Per-source licence verification completed for all sources feeding the second indication (same process as sources-009); COSMIC/OncoKB excluded; open-sa sources flagged for governance decision",
+    "Evidence cards assembled for the second panel with every assertion cited and graded on both axes (evidenceQuality x evidenceMaturity), targetSafety populated, contradictions surfaced with taxonomy tags",
+    "All cards pass the compliance gate and schema validation in CI; build manifest emitted",
+    "Version-scoped scientific-reviewer sign-off recorded for each released card before publication; inter-rater Cohen's kappa measured and reported"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "An expanded evidence card dataset covering a second cancer indication and target panel, with full provenance, grading, compliance gate pass, and scientific sign-off — extending the project's research value after the first panel is stable.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

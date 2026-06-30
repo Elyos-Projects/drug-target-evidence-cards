@@ -1,0 +1,35 @@
+{
+  "id": "drug-target-evidence-cards-litextract-012",
+  "title": "PMC-OA extraction pipeline (per-article licence check; LLM drafts span-cited candidate statements; human-verified before card inclusion)",
+  "project": "drug-target-evidence-cards",
+  "type": "code",
+  "lane": "donated",
+  "priority": "medium",
+  "domain": ["cancer", "bioinformatics", "open-data", "software", "nlp"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "Cards can be enriched with PMC Open Access literature evidence, but the PMC-OA subset mixes CC-BY, CC-BY-NC, CC-BY-NC-ND, and CC0 licences — it is not uniformly reusable. The extraction pipeline must read each article's machine-readable licence before any text is extracted. Only CC-BY/CC0 articles may contribute copied text or close paraphrase to a CC-BY card; NC/ND articles are cited-and-linked only, not quoted. An LLM assists by drafting candidate evidence statements with span-level citations, but it never finalises a shippable assertion — every extracted statement is human-verified. This depends on the compliance gate (001) and the assembler (007).",
+  "objective": "Build the PMC-OA literature extraction pipeline (packages/litextract or equivalent): fetch open-access full text from the PMC-OA subset, read each article's machine-readable licence, restrict copied text or close paraphrase to CC-BY/CC0 articles only, use the LLM (behind the provider-neutral client) to draft candidate evidence statements with span-level citations, and route every draft statement to a human curator queue for verification before card inclusion. NC/ND articles contribute citation links only, never quoted text.",
+  "acceptanceCriteria": [
+    "Pipeline fetches open-access full text from the PMC-OA subset using the PMC OA API or bulk download; only open-access articles in the OA subset are processed",
+    "Each article's machine-readable licence is read and checked before any text extraction: only CC-BY and CC0 articles may contribute copied text or close paraphrase; CC-BY-NC, CC-BY-NC-ND, and CC-BY-ND articles are cited-and-linked only (URL + PMID recorded), never quoted or redistributed",
+    "Licence classification per article is enforced by the compliance gate; an NC/ND article contributing copied text is a CI-failing compliance violation",
+    "LLM (provider-neutral client, open-access content only) drafts candidate evidence statements from CC-BY/CC0 article text with mandatory span-level citations (each statement cites the exact text span it derives from); statements without a citable span are dropped",
+    "Every LLM-drafted statement is routed to a human curator verification queue before it can be included in a card; no LLM-drafted statement enters a card unverified",
+    "Extracted and human-verified statements are attached to cards with provenance: article PMID, licence, retrievalDate, and the cited text span; they pass the compliance gate and schema validation",
+    "No secrets, API keys, or PII are written to logs or committed files; only open-access content is sent to the LLM API",
+    "pnpm build && pnpm test && pnpm lint pass with litextract package included"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A merged PR adding the PMC-OA extraction pipeline (packages/litextract or equivalent) with per-article licence enforcement, LLM-assisted span-cited draft generation, and a human curator verification queue — enriching cards with literature evidence under strict licence and human-verification controls.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

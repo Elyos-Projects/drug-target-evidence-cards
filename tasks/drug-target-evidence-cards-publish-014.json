@@ -1,0 +1,33 @@
+{
+  "id": "drug-target-evidence-cards-publish-014",
+  "title": "Accessible static rendering + downloadable CC-BY dataset + attribution manifest + reproduction instructions (WCAG 2.2 AA; third-party reproduction target)",
+  "project": "drug-target-evidence-cards",
+  "type": "code",
+  "lane": "donated",
+  "priority": "medium",
+  "domain": ["cancer", "bioinformatics", "open-data", "software", "accessibility"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "The research cards and dataset need to be published in an accessible, openly-licensed form so real beneficiaries can use and redistribute them. The rendering must meet WCAG 2.2 AA accessibility standards, show all sources/grades/version/disclaimer on every card, and be accompanied by a downloadable dataset with a complete attribution/LICENSES manifest. Reproduction instructions must be published so a third party can regenerate the cards from the pinned manifest. This depends on the assembled cards (010) and the scientific sign-off (011).",
+  "objective": "Build the accessible static rendering (apps/site or equivalent) meeting WCAG 2.2 AA, showing sources/grades/version and the persistent 'not medical advice' notice on every card; publish the downloadable CC-BY dataset with an attribution/LICENSES manifest listing every source, its licence, and required attribution string; publish reproduction instructions; and attempt (or coordinate) at least one third-party independent reproduction of the pipeline.",
+  "acceptanceCriteria": [
+    "Static rendering meets WCAG 2.2 AA accessibility standards; verified against automated accessibility checks and manually reviewed",
+    "Every card in the rendering shows: target and indication, all sources with licences and versions, both grade axes for every assertion, the build manifest version, and the persistent 'Research summary compiled from open sources. Not medical advice. Not for clinical or treatment decisions. Consult a qualified oncologist.' notice",
+    "Downloadable dataset (JSON) is published under the project's output licence (CC-BY-4.0 or CC-BY-SA-4.0 per the governance decision) and ships with an attribution/LICENSES manifest listing every source, its licence class, required attribution string, and the version used",
+    "Reproduction instructions are published: step-by-step guide to re-running the pipeline from the pinned source manifest to regenerate the cards, sufficient for an independent third party to attempt reproduction",
+    "At least one third-party independent reproduction of the pipeline is attempted (not by project maintainers) and its result recorded in the repository (reproduction report as issue or PR)",
+    "pnpm build && pnpm test && pnpm lint pass; the compliance gate runs as part of the publishing build"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A merged PR delivering the accessible static rendering (WCAG 2.2 AA), downloadable CC-BY dataset, attribution/LICENSES manifest, and reproduction instructions; a recorded third-party reproduction attempt — completing M4 and making the cards usable by real beneficiaries.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}
