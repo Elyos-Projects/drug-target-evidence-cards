@@ -1,0 +1,35 @@
+{
+  "id": "drug-target-evidence-cards-assemble-007",
+  "title": "ID mapping (HGNC/Ensembl/UniProt; EFO/MONDO/OncoTree) + assembler with contradiction surfacing",
+  "project": "drug-target-evidence-cards",
+  "type": "code",
+  "lane": "donated",
+  "priority": "high",
+  "domain": ["cancer", "bioinformatics", "open-data", "software"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "The assembly pipeline must resolve targets to canonical identifiers and indications to ontology IDs, then merge per-source evidence facts into a single Evidence Card while surfacing contradictions rather than silently picking one source. This requires a documented contradiction-aggregation policy and taxonomy so two curators grade the same card the same way. The assembler depends on the card schema (002) and the source adapters (006), and it produces cards that the validator (008) and exemplar workflow (005) consume.",
+  "objective": "Build the ID mapping module (HGNC/Ensembl/UniProt for targets; EFO/MONDO/OncoTree for indications, cross-checking across sources to avoid gene/target conflation) and the card assembler that merges per-source evidence facts into Evidence Card JSON, applies the grading rubric to assign both grade axes, surfaces contradictions with taxonomy labels and netRead, and emits cards conforming to the schema with provenance on every assertion.",
+  "acceptanceCriteria": [
+    "ID mapping module resolves targets to canonical HGNC symbol, Ensembl gene ID, and UniProt accession; indications to an ontology ID (EFO, MONDO, or OncoTree); cross-checks IDs across sources to detect and flag gene/target conflation before assembly",
+    "Assembler merges per-source evidence facts into a single Evidence Card JSON conforming to the schema from task 002; every emitted assertion carries both evidenceQuality and evidenceMaturity grades",
+    "Assembler surfaces contradictions (disagreeing sources on the same assertion) rather than silently choosing one source; each contradiction is tagged with its taxonomy label (measurement-difference, biological-context-dependence, or version-drift) and a netRead summarising the disagreement under the documented contradiction-aggregation policy",
+    "Contradiction-aggregation policy is documented and committed to the repository so two curators applying it independently produce the same contradiction taxonomy and netRead",
+    "isAbsenceOfEvidence assertions (e.g. 'no dependency signal in lineage X') are assembled as first-class card content, not omitted",
+    "Every assembled assertion carries at least one provenance source record (sourceName, accession, releaseVersion, retrievalDate, url, license, licenseClass, upstreamProvenance[]); an assertion without provenance is a build error",
+    "Assembler emits the M0 exemplar card regenerated from the source adapters (manifest-diff-explainable: every value change is explained by a source-release or algorithm diff, not byte-stable)",
+    "pnpm build && pnpm test && pnpm lint pass; assembler has unit tests covering ID mapping, contradiction surfacing, and both-axes grade coverage"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A merged PR adding the ID mapping module and card assembler (packages/assemble or equivalent) with documented contradiction-aggregation policy, producing Evidence Card JSON conforming to the schema with both grade axes and provenance on every assertion.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

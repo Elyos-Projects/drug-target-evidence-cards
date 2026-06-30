@@ -1,0 +1,33 @@
+{
+  "id": "drug-target-evidence-cards-repo-004",
+  "title": "Monorepo + pnpm + TS/ESM + CI (build/test/lint) skeleton with core/adapter split",
+  "project": "drug-target-evidence-cards",
+  "type": "code",
+  "lane": "donated",
+  "priority": "high",
+  "domain": ["software", "bioinformatics", "open-data"],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "small",
+  "status": "open",
+  "context": "The project requires a TypeScript/ESM monorepo with pnpm workspaces as its engineering foundation before any pipeline or adapter code can be written. The architecture must enforce Elyos's core/adapter split: the agent-neutral pipeline core (packages/compliance, packages/schema-cards, packages/assemble, packages/validate) stays vendor-free, and all source-specific code lives in adapters/. CI must run build, test, and lint. This is an M0 prerequisite for the source adapters (006).",
+  "objective": "Bootstrap the monorepo: pnpm workspace with TypeScript/ESM, package structure for packages/compliance, packages/schema-cards, packages/assemble, packages/validate, and adapters/sources/*, CI (GitHub Actions) running build/test/lint with green checks, a .editorconfig and code-style configuration, and a top-level README stub. The core/adapter split must be enforced from the start — no vendor-specific code in the core packages.",
+  "acceptanceCriteria": [
+    "pnpm workspace monorepo with TypeScript/ESM (ESM-first, no CommonJS) set up and all packages build cleanly with pnpm build",
+    "Package structure established for at minimum: packages/compliance (compliance gate), packages/schema-cards (card schema + rubric), packages/assemble (ID mapping + assembler), packages/validate (validation + manifest), and adapters/ (source-specific adapters directory)",
+    "CI pipeline (GitHub Actions or equivalent) runs pnpm build && pnpm test && pnpm lint and passes; a failing test or lint error fails the build",
+    "Core/adapter split enforced from bootstrap: agent-neutral pipeline core packages have no imports from adapters/; adapter packages may import from core packages",
+    "No secrets, tokens, or API keys committed to any file; dependency and secret scanning enabled in CI",
+    "pnpm build && pnpm test && pnpm lint pass locally and in CI"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A merged PR containing the monorepo skeleton with pnpm/TS/ESM, the core/adapter package structure, and green CI — the engineering foundation that all subsequent pipeline and adapter tasks build on.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

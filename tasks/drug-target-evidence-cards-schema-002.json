@@ -1,0 +1,37 @@
+{
+  "id": "drug-target-evidence-cards-schema-002",
+  "title": "Evidence Card JSON Schema + cited grading rubric (evidenceQuality x evidenceMaturity, no GRADE) + target-safety fields, built as shared target-evidence-core",
+  "project": "drug-target-evidence-cards",
+  "type": "design-spec",
+  "lane": "donated",
+  "priority": "high",
+  "domain": ["cancer", "bioinformatics", "open-data", "research", "schema-design"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "Drug-Target-Evidence-Cards requires a JSON Schema for evidence cards and a published, cited evidence-grading rubric before any card work can begin. The schema must enforce the project's strict data model (two-axis grading, provenance per assertion, aggregate-only clinical landscape, no per-patient recommendations) and serve as the shared target-evidence-core engine consumed by sibling repos. No partner or scientific reviewer is yet secured. This is an M0 dependency that blocks the exemplar card (005) and the assembly pipeline (007).",
+  "objective": "Design and publish the Evidence Card JSON Schema covering all required fields (target IDs, indication ontology ID, associationEvidence with two grade axes, dependencyDetail, targetSafety, tractability, knownDrugs as research context, clinicalLandscape as aggregate-only counts, contradictions with taxonomy and netRead, changeLog, provenance with licenseClass and upstreamProvenance, review, disclaimer) and a versioned, cited evidence-grading rubric on two separate axes (evidenceQuality for study strength and evidenceMaturity for in-silico/in-vitro/in-vivo/human-genetic/clinical-aggregate, weighted per published literature), adapting a published scheme and explicitly not using GRADE, built as the shared target-evidence-core engine.",
+  "acceptanceCriteria": [
+    "JSON Schema for the Evidence Card published and versioned, covering: target (geneSymbol/ensemblId/uniprotId), indication (cancerType/ontologyId/aggregateOnly), associationEvidence[] with evidenceType/statement/direction/evidenceQuality/evidenceMaturity/isAbsenceOfEvidence/sources[], dependencyDetail (depmapRelease/scoringAlgorithm/screenProject/replicatesAcrossProjects/lineageSpecificity/caveats), targetSafety (geneticConstraint/essentiality/expressionBreadth/onTargetLiabilityNote/sources[]), tractability, knownDrugs[] (research context only), clinicalLandscape (aggregateTrialCounts/phases/no patient-level data/no trial-activity ranking/no recruiting-trial links), limitations, contradictions[] (statement/taxonomy/disagreeingSources[]/netRead), openQuestions[], provenance.sources[] (sourceName/accession/releaseVersion/retrievalDate/url/license/licenseClass/upstreamProvenance[]/lastVerified/validUntil), changeLog[], review, disclaimer",
+    "Schema enforces two separate grade axes on every assertion: evidenceQuality (study strength) and evidenceMaturity (in-silico/in-vitro/in-vivo/human-genetic/clinical-aggregate); neither axis is collapsible into the other",
+    "A published, versioned, cited evidence-grading rubric accompanies the schema, adapting a published scheme (Open Targets harmonic-sum datatype aggregation or a levels-of-evidence variant) and explicitly NOT using GRADE; rubric is published with the dataset and documents the weighted maturity axis based on Nelson 2015 and Minikel 2024",
+    "isAbsenceOfEvidence boolean field is first-class in associationEvidence so that 'no dependency signal in lineage X' is recorded as informative, not omitted",
+    "clinicalLandscape is constrained to aggregate counts and phases only; no field can express a per-patient recommendation, no trial-activity ranking, no links to recruiting trials",
+    "Schema includes a constant disclaimer field with value 'Research summary compiled from open sources. Not medical advice. Not for clinical or treatment decisions. Consult a qualified oncologist.'",
+    "Schema/gate/rubric authored as the shared target-evidence-core engine that sibling repos (ewing-drug-target-evidence, ewing-biomarker-evidence-cards) can consume; non-overlap rule documented (cancer-wide panel excludes Ewing/sarcoma indications owned by the sibling)",
+    "Schema passes JSON Schema draft-07 validation and is committed to the monorepo under packages/schema-cards or equivalent core package"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md",
+    "docs/good-deed-definition.md",
+    "packages/schema/src/schemas.ts"
+  ],
+  "output": "A versioned JSON Schema file for the Evidence Card (committed to the monorepo) and a published, cited evidence-grading rubric document on two axes (evidenceQuality x evidenceMaturity), both forming the shared target-evidence-core engine that the exemplar card (005), the assembler (007), and sibling repos consume.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

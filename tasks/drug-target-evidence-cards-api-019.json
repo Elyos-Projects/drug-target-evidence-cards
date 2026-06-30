@@ -1,0 +1,34 @@
+{
+  "id": "drug-target-evidence-cards-api-019",
+  "title": "Read-only query API / serving layer over the evidence card dataset (optional; dataset-first remains source of truth)",
+  "project": "drug-target-evidence-cards",
+  "type": "code",
+  "lane": "donated",
+  "priority": "low",
+  "domain": ["cancer", "bioinformatics", "open-data", "software"],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "After the dataset is published (M4), a read-only query API may be built to make the evidence cards more accessible to programmatic consumers. This is optional and backlog: the dataset (versioned files + static rendering) is and remains the authoritative source of truth. The API must expose only the open-class card content, carry the 'not medical advice' notice in every response, and serve no patient-level data. It is not a clinical decision-support API.",
+  "objective": "Build a read-only query API (REST or GraphQL) serving the evidence card dataset: query by target ID, gene symbol, cancer indication, or evidence type; return card JSON with provenance, grades, and the 'not medical advice' notice; serve no patient-level data and carry no treatment recommendations. The dataset files remain the authoritative source; the API is a read-through serving layer.",
+  "acceptanceCriteria": [
+    "Read-only API implemented serving the evidence card dataset; no write endpoints; no patient-level data in any response",
+    "Every API response includes the 'not medical advice' notice and the card's source manifest version",
+    "API exposes only open-class card content (licence-class enforcement applied at the serving layer; no NC or controlled-access data served)",
+    "Query endpoints support at minimum: lookup by gene symbol/HGNC ID, by Ensembl ID, by cancer indication/ontology ID, and by evidence type",
+    "API documentation published; rate limiting and abuse-prevention controls in place",
+    "No secrets, API keys, or PII in logs or responses; dependency scanning in CI",
+    "pnpm build && pnpm test && pnpm lint pass with API package included"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A merged PR adding a read-only query API serving the evidence card dataset with licence-class enforcement, 'not medical advice' notice, and no patient-level data — an optional serving layer over the authoritative dataset.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

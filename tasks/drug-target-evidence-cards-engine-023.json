@@ -1,0 +1,33 @@
+{
+  "id": "drug-target-evidence-cards-engine-023",
+  "title": "Factor schema + compliance gate + rubric + assembler into a reusable target-evidence-core library consumed by sibling card repos",
+  "project": "drug-target-evidence-cards",
+  "type": "code",
+  "lane": "donated",
+  "priority": "low",
+  "domain": ["cancer", "bioinformatics", "open-data", "software"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "The schema, compliance gate, grading rubric, and assembler built for this project are the shared engine that the sibling repos (ewing-drug-target-evidence, ewing-biomarker-evidence-cards) should consume rather than re-implement. Factoring these into a reusable target-evidence-core library is the highest-leverage spin-off and resolves the sibling overlap. The library must be agent-neutral (no vendor-specific code), publishable as an npm package, and consumed by the sibling repos. This is a future/backlog task that requires the core components to be stable first.",
+  "objective": "Extract the card schema, compliance gate, grading rubric, and assembler engine from the project's packages into a standalone, publishable target-evidence-core npm package that sibling card repos can install and extend with their own adapters and panel configurations, without duplicating the compliance gate or rubric logic.",
+  "acceptanceCriteria": [
+    "target-evidence-core package extracted and publishable as an npm package (or pnpm workspace package): includes the Evidence Card JSON Schema, the compliance gate (source allowlist + licence-class enforcement + per-assertion citation + identifiability guard), the grading rubric, and the core assembler with contradiction-surfacing and ID-mapping interfaces",
+    "Package is agent-neutral (no vendor-specific imports, no adapter code in the core); adapters in the consuming repos extend the core without modifying it",
+    "At least one sibling repo (ewing-drug-target-evidence or ewing-biomarker-evidence-cards) is migrated to consume target-evidence-core instead of maintaining its own copy of the schema/gate/rubric",
+    "Package is versioned with semver and its changelog documents breaking changes; consuming repos pin a specific version",
+    "The non-overlap rule is enforced: the package's exports include a mechanism for a consuming repo to declare which cancer indications it covers (so the cancer-wide panel can verify it is not double-covering the Ewing sibling's territory)",
+    "pnpm build && pnpm test && pnpm lint pass for the package and all consuming repos"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A merged PR publishing the target-evidence-core npm package containing the shared schema, compliance gate, rubric, and assembler engine, with at least one sibling repo migrated to consume it — resolving the sibling overlap and making the engine reusable.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

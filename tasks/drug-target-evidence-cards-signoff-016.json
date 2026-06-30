@@ -1,0 +1,35 @@
+{
+  "id": "drug-target-evidence-cards-signoff-016",
+  "title": "Oncologist + patient-advocate blocking sign-off + 'not medical advice' / readability verification for patient-facing layer (HIGH tier, deferred out of v1)",
+  "project": "drug-target-evidence-cards",
+  "type": "research",
+  "lane": "donated",
+  "priority": "low",
+  "domain": ["cancer", "patient-advocacy", "research"],
+  "riskTier": "high",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "Any patient-facing content is HIGH risk-tier and cannot ship without blocking sign-off from both a credentialed oncologist and a patient advocate. This is a hard gate — no maintainer can override a 'do not ship' on substance. The oncologist verifies clinical safety, accuracy, and the 'not medical advice' framing; the advocate verifies plain-language faithfulness and that nothing reads as a recommendation. Sign-off is version-scoped. The oncologist holds a veto on clinical safety. Both reviewers must have disclosed and cleared conflicts of interest. No patient-facing release under any circumstances without both sign-offs recorded.",
+  "objective": "Obtain and record version-scoped blocking sign-off for the patient-facing plain-language layer (015) from both a credentialed oncologist and a patient advocate: the oncologist verifies clinical safety, accuracy, and that no content reads as a treatment or clinical recommendation; the advocate verifies plain-language faithfulness, accessibility, and the 'not medical advice' framing. Both sign-offs are recorded in the reviewers ledger with credentials, COI disclosure, and the signed-off version. The oncologist holds a veto on clinical safety.",
+  "acceptanceCriteria": [
+    "GATE: a credentialed oncologist AND a patient advocate have been secured, their credentials and consent recorded, and their conflicts of interest disclosed and cleared before sign-off begins; the layer does not ship without both",
+    "The oncologist (a credentialed MD with oncology specialisation) reviews every page of the patient-facing layer for clinical safety and accuracy, verifies that no content reads as a treatment recommendation, therapy comparison, dosing guidance, or trial selection for any individual, and confirms the 'not medical advice' framing is adequate",
+    "The patient advocate reviews every page for plain-language faithfulness, accessibility (non-specialist comprehension), and that no content reads as a recommendation or directive for a patient to take any action",
+    "Both sign-offs are recorded version-scoped in the reviewers ledger: reviewer name, credentials, COI disclosure, reviewed version of the patient-facing layer, sign-off date, and any conditions",
+    "The oncologist's veto right is documented: a 'do not ship' from the oncologist on clinical safety grounds is a hard block that no maintainer can override; escalation path (second credentialed reviewer or Elyos governance) is recorded",
+    "Name-use for both reviewers is limited to the specific versions they approved; their names may not imply endorsement of the broader project",
+    "Patient-facing layer does not go live or become publicly accessible until both sign-offs are committed to the repository"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md",
+    "docs/good-deed-definition.md"
+  ],
+  "output": "A committed reviewers ledger entry recording version-scoped, COI-cleared blocking sign-off from both a credentialed oncologist and a patient advocate for the patient-facing plain-language layer — the HIGH-tier gate that makes the layer eligible for public release.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

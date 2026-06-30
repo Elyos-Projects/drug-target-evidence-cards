@@ -1,0 +1,37 @@
+{
+  "id": "drug-target-evidence-cards-exemplar-005",
+  "title": "One hand-curated exemplar evidence card (fully cited, graded, 'not medical advice') for scientific and compliance review",
+  "project": "drug-target-evidence-cards",
+  "type": "data",
+  "lane": "donated",
+  "priority": "high",
+  "domain": ["cancer", "bioinformatics", "open-data", "research", "data-curation"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "dataset",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "Before scaling to full card production, the project needs one hand-curated exemplar evidence card that demonstrates the schema, grading rubric, compliance gate, and 'not medical advice' framing all working together. The exemplar is built by hand (not by the automated pipeline) so that every assertion is individually cited and graded, and it serves as the gold standard for the pipeline to regenerate in M1. It depends on the compliance gate (001), the card schema (002), and the indication/panel selection (003). A scientific reviewer and compliance reviewer must draft-review it before M0 is complete.",
+  "objective": "Build one fully hand-curated target x indication evidence card conforming to the Evidence Card JSON Schema: every assertion cited to an open-class source with accession, release version, retrieval date, and licence; every assertion graded on both evidenceQuality and evidenceMaturity axes per the rubric; targetSafety populated; contradictions surfaced; aggregate-only clinical landscape; and the persistent 'research use - not medical advice' disclaimer. The card must pass the compliance gate and schema validation. Scientific reviewer and compliance reviewer conduct a draft review and record their findings.",
+  "acceptanceCriteria": [
+    "One target x indication evidence card assembled by hand, choosing a target and indication from the panel selected in task 003",
+    "Every assertion is cited to at least one open-class source with accession/id, release version, retrieval date, URL, and licence recorded in provenance.sources[]",
+    "Every assertion carries both evidenceQuality and evidenceMaturity grades per the rubric from task 002; no assertion is ungrated on either axis",
+    "targetSafety dimension is populated (geneticConstraint, essentiality, expressionBreadth, onTargetLiabilityNote) so the card does not over-promote a tractable-but-toxic target",
+    "Any contradictions (disagreeing sources) are surfaced and tagged with taxonomy (measurement-difference, biological-context-dependence, or version-drift) rather than silently resolved",
+    "clinicalLandscape contains aggregate trial counts and phases only; no patient-level data; no trial-activity ranking; no links to recruiting trials",
+    "The constant disclaimer 'Research summary compiled from open sources. Not medical advice. Not for clinical or treatment decisions. Consult a qualified oncologist.' is present on the card",
+    "Card passes the compliance gate (all sources on the allowlist, no NC-in-output, no controlled-access, per-assertion citation coverage) and schema validation (both tools run in CI)",
+    "Scientific reviewer conducts a draft review and records findings; compliance reviewer confirms licence compliance; findings committed to the repository"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md",
+    "docs/good-deed-definition.md"
+  ],
+  "output": "One hand-curated exemplar evidence card JSON (committed to the repository), passing the compliance gate and schema validation, with draft scientific-reviewer and compliance-reviewer findings recorded — the gold standard the M1 pipeline regenerates and the template for M2 card production.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

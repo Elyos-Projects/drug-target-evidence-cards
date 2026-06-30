@@ -351,3 +351,36 @@ Complete, schema-valid Task JSON for the first M0 task (`drug-target-evidence-ca
   "outputLicense": "MIT"
 }
 ```
+
+---
+
+## Generated task index
+
+> Generated: 2026-06-29 by Elyos task-decomposition agent. All 24 files validated with `validate-tasks.mjs` (ALL VALID). Fan-out dimensions: none (no explicitly enumerated fan-out dimensions in TASKS.md; i18n-020 is a single task because no target languages are specified). Seed: drug-target-evidence-cards-compliance-001.json (pre-existing). Generated (new): 002–024 (23 files).
+
+| File | Milestone | Type | riskTier | deliverable |
+|---|---|---|---|---|
+| drug-target-evidence-cards-compliance-001.json | M0 | code | high | pr |
+| drug-target-evidence-cards-schema-002.json | M0 | design-spec | medium | document |
+| drug-target-evidence-cards-panel-003.json | M0 | research | medium | document |
+| drug-target-evidence-cards-repo-004.json | M0 | code | low | pr |
+| drug-target-evidence-cards-exemplar-005.json | M0 | data | medium | dataset |
+| drug-target-evidence-cards-adapters-006.json | M1 | code | medium | pr |
+| drug-target-evidence-cards-assemble-007.json | M1 | code | medium | pr |
+| drug-target-evidence-cards-validate-008.json | M1 | code | medium | pr |
+| drug-target-evidence-cards-sources-009.json | M2 | data | high | dataset |
+| drug-target-evidence-cards-cards-010.json | M2 | data | medium | dataset |
+| drug-target-evidence-cards-review-011.json | M2 | research | medium | document |
+| drug-target-evidence-cards-litextract-012.json | M3 | code | medium | pr |
+| drug-target-evidence-cards-verify-013.json | M3 | research | medium | document |
+| drug-target-evidence-cards-publish-014.json | M4 | code | medium | pr |
+| drug-target-evidence-cards-plainlang-015.json | M5 | writing | high | document |
+| drug-target-evidence-cards-signoff-016.json | M5 | research | high | document |
+| drug-target-evidence-cards-ops-017.json | M6 | maintenance | medium | document |
+| drug-target-evidence-cards-breadth-018.json | Backlog | data | medium | dataset |
+| drug-target-evidence-cards-api-019.json | Backlog | code | low | pr |
+| drug-target-evidence-cards-i18n-020.json | Backlog | writing | high | translation |
+| drug-target-evidence-cards-contribute-021.json | Backlog | data | medium | dataset |
+| drug-target-evidence-cards-cosmic-022.json | Backlog | code | medium | pr |
+| drug-target-evidence-cards-engine-023.json | Backlog | code | medium | pr |
+| drug-target-evidence-cards-mcp-024.json | Backlog | code | low | pr |

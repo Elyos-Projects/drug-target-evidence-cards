@@ -1,0 +1,35 @@
+{
+  "id": "drug-target-evidence-cards-plainlang-015",
+  "title": "Patient-facing plain-language layer drafted from cited cards (education only; NOT medical advice; deferred out of v1; builds only if oncologist + advocate secured)",
+  "project": "drug-target-evidence-cards",
+  "type": "writing",
+  "lane": "donated",
+  "priority": "low",
+  "domain": ["cancer", "patient-advocacy", "science-communication"],
+  "riskTier": "high",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "This is an OPTIONAL, HIGH risk-tier task that is deferred out of v1 by default. It builds ONLY if a credentialed oncologist AND a patient advocate have been secured (TO BE SECURED). The patient-facing plain-language layer provides educational summaries for patients and patient advocates derived solely from the cited, signed-off research cards. It is education only — it must never be read as treatment advice, therapy selection, or a clinical recommendation. The 'not medical advice' notice is mandatory on every page. No patient-facing release is permitted without the blocking oncologist + advocate sign-off recorded in task 016.",
+  "objective": "Draft patient-facing plain-language summaries of the cited, scientifically-reviewed research cards: one summary per card, derived only from the signed-off card content, written for a non-specialist audience (patients and advocates), education-only framing throughout, 'not medical advice' notice on every page, routing clinical questions to a qualified oncologist, and nothing that reads as a treatment or trial recommendation. Submit drafts to the oncologist + advocate sign-off workflow (016).",
+  "acceptanceCriteria": [
+    "GATE: this task does not start until a credentialed oncologist AND a patient advocate have been secured and their participation confirmed; if not secured, task remains open and the layer is skipped in v1",
+    "Plain-language summaries are derived only from the cited, version-scoped scientifically-reviewed research cards (011); no new claims or sources are introduced in the plain-language layer",
+    "Summaries are written for a non-specialist audience (patients and patient advocates); technical terminology is explained or replaced with plain language without losing scientific accuracy",
+    "Every page carries the mandatory 'Research summary compiled from open sources. Not medical advice. Not for clinical or treatment decisions. Consult a qualified oncologist.' notice prominently",
+    "No content reads as a treatment recommendation, therapy comparison, trial suggestion, or dosing guidance for any individual; summaries explain the research landscape, not what a patient should do",
+    "Clinical questions are explicitly routed to a qualified oncologist on every page",
+    "Drafts are submitted to the oncologist + advocate sign-off workflow (016) before any publication; the layer does not ship without recorded blocking sign-off"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md",
+    "docs/good-deed-definition.md"
+  ],
+  "output": "Draft patient-facing plain-language summaries (one per research card) committed to the repository as review drafts, ready for oncologist + advocate sign-off in task 016 — conditional on those reviewers having been secured beforehand.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

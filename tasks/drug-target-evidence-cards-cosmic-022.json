@@ -1,0 +1,32 @@
+{
+  "id": "drug-target-evidence-cards-cosmic-022",
+  "title": "COSMIC/OncoKB pointer-reference integration (NC-safe, no copied data, pointer-only under their own terms)",
+  "project": "drug-target-evidence-cards",
+  "type": "code",
+  "lane": "donated",
+  "priority": "low",
+  "domain": ["cancer", "bioinformatics", "open-data", "software", "compliance"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "small",
+  "status": "open",
+  "context": "COSMIC and OncoKB are non-commercial (NC) sources that cannot be redistributed in the CC-BY output. However, a card may carry an external pointer to COSMIC or OncoKB ('see COSMIC for somatic mutation data on gene X') under their own terms, without copying any data values. This task adds pointer-reference support to the card schema and pipeline: a card can reference COSMIC/OncoKB by URL/accession, but no COSMIC or OncoKB data value is ever included in the CC-BY card output. The compliance gate must enforce this.",
+  "objective": "Add pointer-reference support for COSMIC and OncoKB to the card schema and pipeline: a new non-copying pointer field (e.g. externalReferences[]) records the COSMIC/OncoKB URL and accession for a given target, clearly marked as 'non-commercial source, pointer only, not redistributed'; no COSMIC or OncoKB data values are copied into any card field. The compliance gate enforces that no NC source data enters the card output, and the pointer field is clearly distinguished from evidence assertions.",
+  "acceptanceCriteria": [
+    "A pointer-reference field (e.g. externalReferences[]) is added to the card schema allowing COSMIC and OncoKB to be referenced by URL/accession with a licenseClass of non-commercial and a 'pointer-only' flag",
+    "No COSMIC or OncoKB data values (mutation counts, variant annotations, therapeutic levels) appear in any card assertion field; the compliance gate enforces this as a CI-failing violation",
+    "The pointer field is clearly distinguished in the card rendering from evidence assertions: labelled as 'external non-commercial reference - data not included in this open dataset'",
+    "The compliance gate registry entries for COSMIC and OncoKB are updated to reflect the pointer-only allowance (no data copying permitted under any circumstances)",
+    "pnpm build && pnpm test && pnpm lint pass; a test asserts that a card with NC data values in an assertion field fails the compliance gate"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A merged PR adding pointer-reference support for COSMIC/OncoKB to the card schema and pipeline, with compliance gate enforcement that no NC data is copied into the CC-BY output.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

@@ -1,0 +1,34 @@
+{
+  "id": "drug-target-evidence-cards-review-011",
+  "title": "Scientific-reviewer sign-off pass for each released card (version-scoped) with inter-rater reliability measurement and M2 kill-gate",
+  "project": "drug-target-evidence-cards",
+  "type": "research",
+  "lane": "donated",
+  "priority": "high",
+  "domain": ["cancer", "bioinformatics", "research", "data-curation"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "Research cards are MEDIUM risk-tier and cannot be released without sign-off from a qualified scientific reviewer (cancer-biology/bioinformatics PhD/MD or experienced biocurator). Sign-off is version-scoped and must be recorded in a reviewers ledger. A second-curator inter-rater reliability (Cohen's kappa) must be measured on a sampled set to directly quantify the project's core value. A kill-gate applies: if the reviewer finds the synthesis no more reliable or useful than reading raw sources, the project pauses and reassesses before scaling. No scientific reviewer is yet secured.",
+  "objective": "Conduct version-scoped scientific-reviewer sign-off for each research card assembled in task 010: the reviewer verifies accuracy, grading (both axes), faithful sourcing, and contradiction taxonomy; records sign-off (version + date + reviewer credentials) in the reviewers ledger. A second curator independently grades a sampled set of assertions; Cohen's kappa is computed and reported per release. If the reviewer judges the synthesis no more reliable/useful than raw sources, the project pauses (kill-gate fires) before scaling.",
+  "acceptanceCriteria": [
+    "A qualified scientific reviewer (cancer-biology or bioinformatics PhD/MD, or experienced biocurator) has been secured and their credentials and consent recorded before sign-off begins",
+    "Reviewer verifies accuracy, grading (both evidenceQuality and evidenceMaturity axes), faithful sourcing, and contradiction taxonomy for each card; findings are documented per card",
+    "Sign-off is version-scoped: the reviewers ledger records the card ID, card version, source manifest version, reviewer name/credentials, sign-off date, and any conditions; edits to a card after sign-off require re-sign-off",
+    "A second curator independently grades a sampled set of assertions (minimum 10% of assertions across the panel); Cohen's kappa is computed and reported per release as the direct measure of the project's core value (grading reproducibility)",
+    "Kill-gate: if the scientific reviewer concludes that the synthesised cards are no more reliable or useful for a researcher than reading the raw sources directly, card production pauses and the project reassesses before scaling to further cards or indications; the kill-gate finding is committed to the repository",
+    "All cards receive recorded sign-off before any public release or handoff to a beneficiary; no card is marked 'released' without its version-scoped reviewer record"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md",
+    "docs/good-deed-definition.md"
+  ],
+  "output": "A committed reviewers ledger with version-scoped scientific sign-off for each released card, a Cohen's kappa inter-rater reliability report for the sampled set, and a recorded kill-gate finding — the MEDIUM-tier review gate that must pass before M2 cards are published.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

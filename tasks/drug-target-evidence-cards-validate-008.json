@@ -1,0 +1,33 @@
+{
+  "id": "drug-target-evidence-cards-validate-008",
+  "title": "Validation + build manifest (pinned versions/algorithms/hashes; manifest-diff-explainable) + staleness fail-safe + contradiction-recall test",
+  "project": "drug-target-evidence-cards",
+  "type": "code",
+  "lane": "donated",
+  "priority": "high",
+  "domain": ["cancer", "bioinformatics", "open-data", "software", "compliance"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "The pipeline needs a validation layer that enforces the compliance gate, schema validation, and both-axes grade-coverage in CI, and produces a reproducible build manifest so any third party can re-derive and diff the cards. It also needs a staleness fail-safe to auto-flag assertions whose sources are past their validUntil date, and a contradiction-detection recall test to verify the assembler catches known disagreements. This depends on the source adapters (006) and the assembler (007).",
+  "objective": "Build the validation package and CI integration that runs the compliance gate, schema validation, and both-axes grade-coverage check on every card; emits a reproducible build manifest (every source + version + scoring algorithm + screen project + retrieval date + hash); implements a staleness fail-safe (lastVerified/validUntil per source, auto-flagging past-validUntil assertions); and provides a contradiction-detection recall test against a seeded gold set of known cross-source disagreements.",
+  "acceptanceCriteria": [
+    "Validation runs the compliance gate (allowlist + licence-class + per-assertion citation + identifiability guard), schema validation, and both-axes grade-coverage check (every assertion must carry both evidenceQuality and evidenceMaturity) in CI; a violation fails the build",
+    "A reproducible build manifest is emitted for every pipeline run, listing every source with its name, version, scoring algorithm (including DepMap Chronos vs CERES and screen project), retrieval date, and hash; the manifest is committed alongside the card files",
+    "Staleness fail-safe: each source record carries lastVerified and validUntil; at validation time, any assertion whose source is past validUntil is auto-flagged ('source release out of date - re-verify') and withheld from a 'current' card; a staleness test asserts no card is served as current past its window",
+    "Contradiction-detection recall test: a seeded gold set of known cross-source disagreements is committed to the repository; the test asserts the assembler surfaces all gold-set contradictions; misses are reported and triaged",
+    "The M0 exemplar card is regenerated manifest-diff-explainably by the pipeline: every value change from a prior run is explained by a recorded source-release or algorithm diff in the manifest; unexplained drift is a test failure (not required to be byte-stable, since upstream rescoring legitimately changes values)",
+    "pnpm build && pnpm test && pnpm lint pass with validation package included; no secrets or PII in manifests or logs"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A merged PR adding the validation package (packages/validate or equivalent) with compliance gate + schema + grade-coverage enforcement in CI, a reproducible build manifest, staleness fail-safe, and contradiction-detection recall test — completing the M1 pipeline.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

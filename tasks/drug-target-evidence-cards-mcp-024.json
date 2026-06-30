@@ -1,0 +1,33 @@
+{
+  "id": "drug-target-evidence-cards-mcp-024",
+  "title": "target-evidence-mcp server exposing evidence cards + provenance/licence ledger to agents (open-only data; research-use disclaimer)",
+  "project": "drug-target-evidence-cards",
+  "type": "code",
+  "lane": "donated",
+  "priority": "low",
+  "domain": ["cancer", "bioinformatics", "open-data", "software"],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "An MCP (Model Context Protocol) server exposing the evidence cards and provenance/licence ledger to AI agents would enable any compliant agent to query 'open, cited evidence for target X in cancer Y' with attribution and grades attached. This is both a distribution channel for the dataset and a candidate contribution/overlay deliverable if the project pivots to Open Targets/Pharos/CIViC. It must expose only open-class card content, carry the 'not medical advice' disclaimer in every tool response, and serve no patient-level data.",
+  "objective": "Build a target-evidence-mcp server (MCP protocol) exposing the evidence card dataset and provenance/licence ledger as MCP tools: query by target ID/gene symbol and cancer indication, returning card content with both grade axes, provenance records (licenseClass, attribution), and the 'not medical advice' disclaimer. Serve only open-class (open/open-sa) data; enforce licence-class at the serving layer; return no patient-level data and no treatment recommendations.",
+  "acceptanceCriteria": [
+    "MCP server implemented following the Model Context Protocol specification; tools exposed include at minimum: get_evidence_card(target_id, indication_id) and list_targets(indication_id)",
+    "Every tool response includes the evidence grades (evidenceQuality + evidenceMaturity), provenance records (sourceName, licenseClass, attribution), and the 'not medical advice' disclaimer",
+    "Only open-class (open or open-sa) card content is served; non-commercial (NC) and controlled-access data are excluded at the serving layer; open-sa content includes share-alike attribution obligations in the response",
+    "No patient-level data, no treatment recommendations, no per-patient clinical guidance in any tool response",
+    "MCP server is implemented in adapters/ (not in core packages) as a vendor-specific serving adapter; the core card data and licence ledger remain in the core packages",
+    "Server documentation published; pnpm build && pnpm test && pnpm lint pass with MCP server included"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A merged PR adding the target-evidence-mcp server in adapters/, exposing the evidence card dataset and provenance/licence ledger as MCP tools with open-only data enforcement and 'not medical advice' disclaimer — an agent-ecosystem distribution channel for the dataset.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

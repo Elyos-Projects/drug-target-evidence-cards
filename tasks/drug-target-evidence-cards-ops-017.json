@@ -1,0 +1,32 @@
+{
+  "id": "drug-target-evidence-cards-ops-017",
+  "title": "Refresh cadence (source-release re-pin/re-validate/re-review) + maintenance rotation + outcomes log + ops runbook",
+  "project": "drug-target-evidence-cards",
+  "type": "maintenance",
+  "lane": "donated",
+  "priority": "low",
+  "domain": ["cancer", "bioinformatics", "open-data", "maintenance"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "After initial delivery (M4), the project must be sustainably maintained. Sources release new versions on known cadences (Open Targets, ChEMBL, DepMap quarterly/annually); a material source update requires re-pinning the manifest, re-running validation, and triggering re-review and re-sign-off for affected cards. The project needs a named maintenance rotation, an ops runbook covering regeneration/validation/publishing/incident-response, and an outcomes log tracking beneficiary uses and reproductions (not download vanity metrics). This depends on the publishing infrastructure (014).",
+  "objective": "Define and commit the project's sustain-and-refresh model: a documented refresh cadence tied to source releases (Open Targets, ChEMBL, DepMap quarterly/annual updates), a named maintenance rotation with clear ownership, an ops runbook covering the full cycle (re-pin manifest, re-run pipeline, re-validate, trigger re-sign-off for affected cards, publish, incident-response), and an outcomes log tracking beneficiary uses, third-party reproductions, and review/compliance status.",
+  "acceptanceCriteria": [
+    "A documented refresh cadence is committed to the repository: defines which source-release events trigger a re-pin, re-run, and re-validation (at minimum: Open Targets, ChEMBL, DepMap major/quarterly releases); a material source update re-pins the build manifest, re-runs the full validation pipeline, and triggers re-review and re-sign-off for cards whose assertions are affected (version-scoped re-sign-off)",
+    "A named maintenance rotation is established with a listed owner (or rotation schedule) and clear responsibilities: who runs the refresh pipeline, who triages staleness flags, who coordinates re-sign-off with the scientific reviewer",
+    "An ops runbook is committed covering: (1) regenerate from pinned sources, (2) validate (compliance gate + schema + grade-coverage + staleness check), (3) diff the build manifest and explain changes, (4) trigger re-sign-off workflow for affected cards, (5) publish updated cards and manifest, (6) incident-response procedure for a compliance gate failure or licence-class change upstream",
+    "An outcomes log template is committed tracking: beneficiary uses (lab or advocacy org using the cards in a concrete decision, qualitative), third-party reproductions (independent pipeline re-runs), review/compliance status per release, and date of last verified source re-pin; downloads and stars are explicitly excluded as metrics",
+    "The staleness fail-safe (lastVerified/validUntil) remains active in CI; the refresh cadence is designed to prevent any card from remaining 'current' past its validUntil window without an auto-flag"
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "CLAUDE.md"
+  ],
+  "output": "A committed sustain-and-refresh package: refresh cadence document, maintenance rotation record, ops runbook, and outcomes log template — enabling the project to remain current and impact-trackable after initial delivery.",
+  "requestor": "TO BE SECURED",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}
